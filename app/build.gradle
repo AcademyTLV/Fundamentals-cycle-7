@@ -8,8 +8,8 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.tenbis.androidacademy"
-        minSdkVersion 14
+        applicationId "com.android.academy"
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
