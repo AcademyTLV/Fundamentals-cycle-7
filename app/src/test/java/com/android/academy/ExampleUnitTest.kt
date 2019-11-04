@@ -1,4 +1,4 @@
-package com.tenbis.androidacademy
+package com.android.academy
 
 import org.junit.Test
 
