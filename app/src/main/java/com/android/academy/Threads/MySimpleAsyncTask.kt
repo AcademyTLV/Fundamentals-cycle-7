@@ -39,21 +39,20 @@ class MySimpleAsyncTask(private val mIAsyncTaskEvents: IAsyncTaskEvents) {
         mIAsyncTaskEvents.onPostExecute()
     }
 
-    protected fun onProgressUpdate(progress: Int?) {
-        mIAsyncTaskEvents.onProgressUpdate(progress!!)
+    protected fun onProgressUpdate(progress: Int) {
+        mIAsyncTaskEvents.onProgressUpdate(progress)
     }
 
 
     fun execute() {
         runOnUiThread(Runnable {
             onPreExecute()
-            mBackgroundThread = object : Thread("Handler_executor_thread") {
-                override fun run() {
-                    doInBackground()
-                    runOnUiThread(Runnable { onPostExecute() })
-                }
+            mBackgroundThread = Thread({
+                doInBackground()
+                runOnUiThread(Runnable { onPostExecute() })
+            },"Handler_executor_thread").also {
+                it.start()
             }
-            mBackgroundThread!!.start()
         })
     }
 
@@ -61,7 +60,6 @@ class MySimpleAsyncTask(private val mIAsyncTaskEvents: IAsyncTaskEvents) {
     private fun runOnUiThread(runnable: Runnable) {
         Handler(Looper.getMainLooper()).post(runnable)
     }
-
 
     protected fun publishProgress(progress: Int) {
         runOnUiThread(Runnable { onProgressUpdate(progress) })

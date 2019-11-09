@@ -5,19 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-
 import androidx.fragment.app.Fragment
-
 import com.android.academy.R
+import kotlinx.android.synthetic.main.fragment_threads.*
 
 
 class CounterFragment : Fragment(), View.OnClickListener {
-    private lateinit var mBtnCreate: Button
-    private lateinit var mBtnStart: Button
-    private lateinit var mBtnCancel: Button
-    private lateinit var mTxtValue: TextView
+
+    companion object {
+        val FRAGMENT_TYPE = "fragment_type"
+    }
 
     private var callbackListener: IAsyncTaskEvents? = null
 
@@ -29,22 +26,15 @@ class CounterFragment : Fragment(), View.OnClickListener {
 
         val rootView = inflater.inflate(R.layout.fragment_threads, container, false)
 
-        mBtnCreate = rootView.findViewById(R.id.btnAsyncCreate)
-        mBtnStart = rootView.findViewById(R.id.btnAsyncStart)
-        mBtnCancel = rootView.findViewById(R.id.btnAsyncCancel)
-        mTxtValue = rootView.findViewById(R.id.fullscreen_content)
-
-        mBtnCreate.setOnClickListener(this)
-        mBtnStart.setOnClickListener(this)
-        mBtnCancel.setOnClickListener(this)
+        btnAsyncCreate.setOnClickListener(this)
+        btnAsyncStart.setOnClickListener(this)
+        btnAsyncCancel.setOnClickListener(this)
 
         //UNPACK OUR DATA FROM OUR BUNDLE
-        val bundle = this.arguments
-        if (bundle != null) {
-            this.arguments?.getString(FRAGMENT_TYPE)?.let {
-                mTxtValue.text = it
-            }
+        this.arguments?.getString(FRAGMENT_TYPE)?.let {
+            fullscreen_content.text = it
         }
+
         return rootView
     }
 
@@ -64,7 +54,7 @@ class CounterFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         callbackListener?.let {
-            if (isAdded ){
+            if (isAdded) {
                 when (v.id) {
                     R.id.btnAsyncCreate -> it.createAsyncTask()
                     R.id.btnAsyncStart -> it.startAsyncTask()
@@ -75,11 +65,7 @@ class CounterFragment : Fragment(), View.OnClickListener {
     }
 
     fun updateFragmentText(text: String) {
-            mTxtValue.text = text
+        fullscreen_content.text = text
     }
 
-    companion object {
-
-        val FRAGMENT_TYPE = "fragment_type"
-    }
 }
