@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 
 import com.android.academy.R
 
+private val FRAGMENT_TAG_THREAD = "fragment_tag_thread"
 
 class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
+
     private lateinit var mThreadsFragment: CounterFragment
     private var mSimpleAsyncTask: MySimpleAsyncTask? = null
 
@@ -17,8 +19,10 @@ class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_threads)
 
-
         savedInstanceState?.let {
+            mThreadsFragment =
+                supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_THREAD) as CounterFragment
+        } ?: run {
             mThreadsFragment = CounterFragment()//Get Fragment Instance
             val data = Bundle()//Use bundle to pass data
             data.putString(
@@ -26,16 +30,11 @@ class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
                 getString(R.string.handler_exe_activity)
             )//put string, int, etc in bundle with a key value
             mThreadsFragment.arguments = data//Finally set argument bundle to fragment
-            supportFragmentManager.beginTransaction().replace(R.id.fragment, mThreadsFragment)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, mThreadsFragment, FRAGMENT_TAG_THREAD)
                 .commit()//now replace the argument fragment
         }
-//            ?:run {
-//
-//        }
-
-
     }
-
 
     /***
      * // IAsyncTaskEvent's methods - start:
@@ -47,11 +46,7 @@ class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
 
     }
 
-
     override fun startAsyncTask() {
-        mSimpleAsyncTask?.isCancelled?.let {
-
-        }
         if (mSimpleAsyncTask == null || mSimpleAsyncTask!!.isCancelled) {
             Toast.makeText(this, R.string.msg_should_create_task, Toast.LENGTH_SHORT).show()
         } else {
@@ -61,7 +56,7 @@ class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
     }
 
     override fun cancelAsyncTask() {
-        mSimpleAsyncTask?.cancel()?:run {
+        mSimpleAsyncTask?.cancel() ?: run {
             Toast.makeText(this, R.string.msg_should_create_task, Toast.LENGTH_SHORT).show()
         }
     }
