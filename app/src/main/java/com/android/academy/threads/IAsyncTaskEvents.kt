@@ -1,4 +1,4 @@
-package com.android.academy.Threads
+package com.android.academy.threads
 
 interface IAsyncTaskEvents {
 

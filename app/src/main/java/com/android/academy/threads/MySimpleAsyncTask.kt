@@ -1,8 +1,10 @@
-package com.android.academy.Threads
+package com.android.academy.threads
 
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+
+const val THREAD_NAME = "Handler_executor_thread"
 
 class MySimpleAsyncTask(private val iAsyncTaskEvents: IAsyncTaskEvents) {
 
@@ -50,7 +52,7 @@ class MySimpleAsyncTask(private val iAsyncTaskEvents: IAsyncTaskEvents) {
             backgroundThread = Thread({
                 doInBackground()
                 runOnUiThread(Runnable { onPostExecute() })
-            }, "Handler_executor_thread").also {
+            }, THREAD_NAME).also {
                 it.start()
             }
         })
