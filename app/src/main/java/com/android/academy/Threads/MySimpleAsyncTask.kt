@@ -4,24 +4,24 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 
-class MySimpleAsyncTask(private val mIAsyncTaskEvents: IAsyncTaskEvents) {
+class MySimpleAsyncTask(private val iAsyncTaskEvents: IAsyncTaskEvents) {
 
     @Volatile
     var isCancelled = false
         private set
-    private var mBackgroundThread: Thread? = null
+    private var backgroundThread: Thread? = null
 
     /**
      * Runs on the UI thread before [.doInBackground].
      */
-    protected fun onPreExecute() {
-        mIAsyncTaskEvents.onPreExecute()
+    private fun onPreExecute() {
+        iAsyncTaskEvents.onPreExecute()
     }
 
     /**
      * Runs on new thread after [.onPreExecute] and before [.onPostExecute].
      */
-    protected fun doInBackground() {
+    private fun doInBackground() {
         val end = 10
         for (i in 0..end) {
             if (isCancelled) {
@@ -35,22 +35,22 @@ class MySimpleAsyncTask(private val mIAsyncTaskEvents: IAsyncTaskEvents) {
     /**
      * Runs on the UI thread after [.doInBackground]
      */
-    protected fun onPostExecute() {
-        mIAsyncTaskEvents.onPostExecute()
+    private fun onPostExecute() {
+        iAsyncTaskEvents.onPostExecute()
     }
 
-    protected fun onProgressUpdate(progress: Int) {
-        mIAsyncTaskEvents.onProgressUpdate(progress)
+    private fun onProgressUpdate(progress: Int) {
+        iAsyncTaskEvents.onProgressUpdate(progress)
     }
 
 
     fun execute() {
         runOnUiThread(Runnable {
             onPreExecute()
-            mBackgroundThread = Thread({
+            backgroundThread = Thread({
                 doInBackground()
                 runOnUiThread(Runnable { onPostExecute() })
-            },"Handler_executor_thread").also {
+            }, "Handler_executor_thread").also {
                 it.start()
             }
         })
@@ -61,12 +61,12 @@ class MySimpleAsyncTask(private val mIAsyncTaskEvents: IAsyncTaskEvents) {
         Handler(Looper.getMainLooper()).post(runnable)
     }
 
-    protected fun publishProgress(progress: Int) {
+    private fun publishProgress(progress: Int) {
         runOnUiThread(Runnable { onProgressUpdate(progress) })
     }
 
     fun cancel() {
         isCancelled = true
-        mBackgroundThread?.interrupt()
+        backgroundThread?.interrupt()
     }
 }
