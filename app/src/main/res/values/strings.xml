@@ -36,8 +36,7 @@
 	<string name="start_intent_service">Start IntentService</string>
 	<string name="start_service">Start Service</string>
 	<string name="the_progress">The progress</string>
-	<string name="open_background_service_activity">Open Background Service Activity</string>
-
+    <string name="open_background_service_activity">Open Background Service Activity</string>
 
 	<string name="title_activity_main">MainActivity</string>
 	<string name="action_settings">Settings</string>
