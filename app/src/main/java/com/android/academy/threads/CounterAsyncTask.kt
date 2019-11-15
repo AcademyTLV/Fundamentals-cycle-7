@@ -1,4 +1,4 @@
-package com.android.academy.Threads
+package com.android.academy.threads
 
 import android.os.AsyncTask
 import android.os.SystemClock
