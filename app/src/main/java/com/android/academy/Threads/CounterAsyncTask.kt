@@ -3,15 +3,15 @@ package com.android.academy.Threads
 import android.os.AsyncTask
 import android.os.SystemClock
 
-class CounterAsyncTask(private val mIAsyncTaskEvents: IAsyncTaskEvents) :
+class CounterAsyncTask(private val iAsyncTaskEvents: IAsyncTaskEvents) :
     AsyncTask<Int, Int, Void>() {
 
     override fun doInBackground(vararg integers: Int?): Void? {
         var length = 0
-        if (integers.size == 1) {
-            length = integers[0]!!
+        length = if (integers.size == 1) {
+            integers[0]!!
         } else {
-            length = 10
+            10
         }
 
         for (i in 0..length) {
@@ -26,16 +26,16 @@ class CounterAsyncTask(private val mIAsyncTaskEvents: IAsyncTaskEvents) :
 
     override fun onPreExecute() {
         super.onPreExecute()
-        mIAsyncTaskEvents.onPreExecute()
+        iAsyncTaskEvents.onPreExecute()
     }
 
     override fun onPostExecute(result: Void) {
         super.onPostExecute(result)
-        mIAsyncTaskEvents.onPostExecute()
+        iAsyncTaskEvents.onPostExecute()
     }
 
     override fun onProgressUpdate(vararg values: Int?) {
-        values[0]?.let { mIAsyncTaskEvents.onProgressUpdate(it) }
+        values[0]?.let { iAsyncTaskEvents.onProgressUpdate(it) }
     }
 
 }

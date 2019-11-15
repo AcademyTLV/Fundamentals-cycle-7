@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.academy.R
 
 class AsyncTaskActivity : AppCompatActivity(), IAsyncTaskEvents {
-    private lateinit var mThreadsFragment: CounterFragment
-    private var mAsyncTask: CounterAsyncTask? = null
+    private lateinit var threadsFragment: CounterFragment
+    private var asyncTask: CounterAsyncTask? = null
 
     companion object {
         const val FRAGMENT_TAG = "fragment_tag"
@@ -21,18 +21,18 @@ class AsyncTaskActivity : AppCompatActivity(), IAsyncTaskEvents {
         setContentView(R.layout.asynctask_activity)
 
         savedInstanceState?.let {
-            mThreadsFragment =
+            threadsFragment =
                 supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as CounterFragment
         } ?: run {
-            mThreadsFragment = CounterFragment()//Get Fragment Instance
+            threadsFragment = CounterFragment()//Get Fragment Instance
             val data = Bundle()//Use bundle to pass data
             data.putString(
                 CounterFragment.FRAGMENT_TYPE,
                 getString(R.string.async_task_activity)
             )//put string, int, etc in bundle with a key value
-            mThreadsFragment.arguments = data//Finally set argument bundle to fragment
+            threadsFragment.arguments = data//Finally set argument bundle to fragment
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment, mThreadsFragment, FRAGMENT_TAG)
+                .replace(R.id.fragment, threadsFragment, FRAGMENT_TAG)
                 .commit()//now replace the argument fragment
         }
     }
@@ -42,20 +42,20 @@ class AsyncTaskActivity : AppCompatActivity(), IAsyncTaskEvents {
      */
     override fun createAsyncTask() {
         Toast.makeText(this, getString(R.string.msg_oncreate), Toast.LENGTH_SHORT).show()
-        mAsyncTask = CounterAsyncTask(this)
+        asyncTask = CounterAsyncTask(this)
     }
 
     override fun startAsyncTask() {
-        if (mAsyncTask == null || mAsyncTask!!.isCancelled) {
+        if (asyncTask == null || asyncTask !!.isCancelled) {
             Toast.makeText(this, R.string.msg_should_create_task, Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, getString(R.string.msg_onstart), Toast.LENGTH_SHORT).show()
-            mAsyncTask!!.execute(10)
+            asyncTask!!.execute(10)
         }
     }
 
     override fun cancelAsyncTask() {
-        mAsyncTask?.cancel(true) ?: run {
+        asyncTask?.cancel(true) ?: run {
             Toast.makeText(this, R.string.msg_should_create_task, Toast.LENGTH_SHORT).show()
         }
     }
@@ -66,12 +66,12 @@ class AsyncTaskActivity : AppCompatActivity(), IAsyncTaskEvents {
 
     override fun onPostExecute() {
         Toast.makeText(this, getString(R.string.msg_postexecute), Toast.LENGTH_SHORT).show()
-        mThreadsFragment.updateFragmentText(getString(R.string.done))
-        mAsyncTask = null
+        threadsFragment.updateFragmentText(getString(R.string.done))
+        asyncTask = null
     }
 
     override fun onProgressUpdate(num: Int) {
-        mThreadsFragment.updateFragmentText(num.toString())
+        threadsFragment.updateFragmentText(num.toString())
     }
 
     override fun onCancel() {
@@ -82,9 +82,9 @@ class AsyncTaskActivity : AppCompatActivity(), IAsyncTaskEvents {
      * //  IAsyncTaskEvent's methods - end
      */
     override fun onDestroy() {
-        mAsyncTask?.let {
+        asyncTask?.let {
             it.cancel(false)
-            mAsyncTask = null
+            asyncTask = null
         }
         super.onDestroy()
     }
