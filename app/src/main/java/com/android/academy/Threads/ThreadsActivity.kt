@@ -8,30 +8,30 @@ import androidx.appcompat.app.AppCompatActivity
 
 import com.android.academy.R
 
-private val FRAGMENT_TAG_THREAD = "fragment_tag_thread"
+private const val FRAGMENT_TAG_THREAD = "fragment_tag_thread"
 
 class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
 
-    private lateinit var mThreadsFragment: CounterFragment
-    private var mSimpleAsyncTask: MySimpleAsyncTask? = null
+    private lateinit var threadsFragment: CounterFragment
+    private var simpleAsyncTask: MySimpleAsyncTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_threads)
 
         savedInstanceState?.let {
-            mThreadsFragment =
+            threadsFragment =
                 supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_THREAD) as CounterFragment
         } ?: run {
-            mThreadsFragment = CounterFragment()//Get Fragment Instance
+            threadsFragment = CounterFragment()//Get Fragment Instance
             val data = Bundle()//Use bundle to pass data
             data.putString(
                 CounterFragment.FRAGMENT_TYPE,
                 getString(R.string.handler_exe_activity)
             )//put string, int, etc in bundle with a key value
-            mThreadsFragment.arguments = data//Finally set argument bundle to fragment
+            threadsFragment.arguments = data//Finally set argument bundle to fragment
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment, mThreadsFragment, FRAGMENT_TAG_THREAD)
+                .replace(R.id.fragment, threadsFragment, FRAGMENT_TAG_THREAD)
                 .commit()//now replace the argument fragment
         }
     }
@@ -42,21 +42,21 @@ class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
 
     override fun createAsyncTask() {
         Toast.makeText(this, getString(R.string.msg_thread_oncreate), Toast.LENGTH_SHORT).show()
-        mSimpleAsyncTask = MySimpleAsyncTask(this)
+        simpleAsyncTask = MySimpleAsyncTask(this)
 
     }
 
     override fun startAsyncTask() {
-        if (mSimpleAsyncTask == null || mSimpleAsyncTask!!.isCancelled) {
+        if (simpleAsyncTask == null || simpleAsyncTask!!.isCancelled) {
             Toast.makeText(this, R.string.msg_should_create_task, Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, getString(R.string.msg_thread_onstart), Toast.LENGTH_SHORT).show()
-            mSimpleAsyncTask!!.execute()
+            simpleAsyncTask!!.execute()
         }
     }
 
     override fun cancelAsyncTask() {
-        mSimpleAsyncTask?.cancel() ?: run {
+        simpleAsyncTask?.cancel() ?: run {
             Toast.makeText(this, R.string.msg_should_create_task, Toast.LENGTH_SHORT).show()
         }
     }
@@ -67,12 +67,12 @@ class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
 
     override fun onPostExecute() {
         Toast.makeText(this, getString(R.string.msg_postexecute), Toast.LENGTH_SHORT).show()
-        mThreadsFragment.updateFragmentText(getString(R.string.done))
-        mSimpleAsyncTask = null
+        threadsFragment.updateFragmentText(getString(R.string.done))
+        simpleAsyncTask = null
     }
 
     override fun onProgressUpdate(num: Int) {
-        mThreadsFragment.updateFragmentText(num.toString())
+        threadsFragment.updateFragmentText(num.toString())
     }
 
     override fun onCancel() {
@@ -84,9 +84,9 @@ class ThreadsActivity : AppCompatActivity(), IAsyncTaskEvents {
      */
 
     override fun onDestroy() {
-        mSimpleAsyncTask?.let {
+        simpleAsyncTask?.let {
             it.cancel()
-            mSimpleAsyncTask = null
+            simpleAsyncTask = null
         }
 
         super.onDestroy()

@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_threads.*
 class CounterFragment : Fragment(), View.OnClickListener {
 
     companion object {
-        val FRAGMENT_TYPE = "fragment_type"
+        const val FRAGMENT_TYPE: String = "fragment_type"
     }
 
     private var callbackListener: IAsyncTaskEvents? = null
