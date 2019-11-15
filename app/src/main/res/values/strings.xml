@@ -25,4 +25,14 @@
 	<string name="done">Done!</string>
 	<string name="title_activity_threads">ThreadsActivity</string>
 
+	<string name="starting_intent_service_msg">Starting IntentService</string>
+	<string name="finishing_intent_service_msg">Finishing IntentService</string>
+	<string name="starting_hardjob_service_msg">Starting Hard Job Service</string>
+	<string name="finishing_hardjob_service_msg">Finishing Hard Job Service, id: %1$d</string>
+	<string name="start_intent_service">Start IntentService</string>
+	<string name="start_service">Start Service</string>
+	<string name="the_progress">The progress</string>
+
+
+
 </resources>
