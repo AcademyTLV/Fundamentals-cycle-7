@@ -14,6 +14,9 @@ import com.android.academy.db.AppDatabase
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
+import com.android.academy.model.MoviesContent.movies
+import com.android.academy.threads.AsyncTaskActivity
+import com.android.academy.threads.ThreadsActivity
 import com.android.academy.model.MoviesContent
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
@@ -45,6 +48,38 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, itemPosition)
         startActivity(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.movies_activity_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_open_async_task -> {
+                // Open Async Task Activity
+                startActivity(Intent(this@MoviesActivity, AsyncTaskActivity::class.java))
+                return true
+            }
+
+            R.id.action_open_thread_handler -> {
+                // Open Thread Handler Activity
+                startActivity(Intent(this@MoviesActivity, ThreadsActivity::class.java))
+                return true
+            }
+
+            R.id.action_delete -> {
+                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
+                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
+                return true
+            }
+
+            else ->
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item)
+        }
     }
 
 
@@ -102,18 +137,5 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         ).show()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_delete -> {
-                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
-                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
-            }
-        }
-        return true
     }
 }
