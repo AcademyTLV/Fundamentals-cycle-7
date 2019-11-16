@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.academy.BackgroundServices.BGServiceActivity
 import com.android.academy.R
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
@@ -53,6 +54,12 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
             R.id.action_open_thread_handler -> {
                 // Open Thread Handler Activity
                 startActivity(Intent(this@MoviesActivity, ThreadsActivity::class.java))
+                return true
+            }
+
+            R.id.action_open_background_service_activity -> {
+                // Open Thread Handler Activity
+                startActivity(Intent(this@MoviesActivity, BGServiceActivity::class.java))
                 return true
             }
 
