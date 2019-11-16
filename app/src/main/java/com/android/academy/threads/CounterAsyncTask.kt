@@ -29,7 +29,7 @@ class CounterAsyncTask(private val iAsyncTaskEvents: IAsyncTaskEvents) :
         iAsyncTaskEvents.onPreExecute()
     }
 
-    override fun onPostExecute(result: Void) {
+    override fun onPostExecute(result: Void?) {
         super.onPostExecute(result)
         iAsyncTaskEvents.onPostExecute()
     }

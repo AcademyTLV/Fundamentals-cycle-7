@@ -2,6 +2,8 @@ package com.android.academy.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,8 @@ import com.android.academy.R
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.MoviesContent.movies
+import com.android.academy.threads.AsyncTaskActivity
+import com.android.academy.threads.ThreadsActivity
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
 import kotlinx.android.synthetic.main.activity_movies.*
@@ -37,6 +41,32 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, itemPosition)
         startActivity(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.movies_activity_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_open_async_task -> {
+                // Open Async Task Activity
+                startActivity(Intent(this@MoviesActivity, AsyncTaskActivity::class.java))
+                return true
+            }
+
+            R.id.action_open_thread_handler -> {
+                // Open Thread Handler Activity
+                startActivity(Intent(this@MoviesActivity, ThreadsActivity::class.java))
+                return true
+            }
+
+            else ->
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item)
+        }
     }
 
 

@@ -26,16 +26,23 @@ class CounterFragment : Fragment(), View.OnClickListener {
 
         val rootView = inflater.inflate(R.layout.fragment_threads, container, false)
 
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        When you access btnAsyncCreate, it calls for getView().findViewById(R.id.btn_K).
+//        The problem is that you are accessing it too soon. getView() returns null
+//        getView() returns null in onCreateView, So we doing it in the onViewCreated method
+
         btnAsyncCreate.setOnClickListener(this)
         btnAsyncStart.setOnClickListener(this)
         btnAsyncCancel.setOnClickListener(this)
 
         //UNPACK OUR DATA FROM OUR BUNDLE
         this.arguments?.getString(FRAGMENT_TYPE)?.let {
-            fullscreen_content.text = it
+            fullscreen_content?.text = it
         }
-
-        return rootView
     }
 
     override fun onAttach(context: Context) {

@@ -11,4 +11,7 @@
 	<color name="purple">#7B1FA2</color>
 	<color name="orange">#FFA500</color>
 
+	<color name="black_overlay">#66000000</color>
+
+
 </resources>
