@@ -11,4 +11,9 @@
         android:id="@+id/action_open_thread_handler"
         android:title="@string/open_thread_handler_activity"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_open_background_service_activity"
+        android:title="@string/open_background_service_activity"
+        app:showAsAction="never"/>
 </menu>

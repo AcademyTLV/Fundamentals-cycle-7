@@ -21,7 +21,6 @@ open class HardJobService : Service() {
 
 
     private lateinit var serviceHandler: ServiceHandler
-    private lateinit var serviceLooper: Looper
     private var isDestroyed = false
 
 
@@ -31,9 +30,8 @@ open class HardJobService : Service() {
         // start the new handler thread
         thread.start()
 
-        serviceLooper = thread.looper
         // start the service using the background handler
-        serviceHandler = ServiceHandler(serviceLooper)
+        serviceHandler = ServiceHandler(thread.looper)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -58,7 +56,7 @@ open class HardJobService : Service() {
         return null
     }
 
-    // Object responsible for
+    // Object responsible for count till 100 and sendBroadcast per step
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
 
         override fun handleMessage(msg: Message) {

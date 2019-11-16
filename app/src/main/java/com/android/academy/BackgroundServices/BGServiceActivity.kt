@@ -21,10 +21,10 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
         const val SERVICE_STATUS: String = "SERVICE_STATUS"
     }
 
-    private var backgroundProgressReceiver: BackgroundProgressReceiver? = null
-    private var isServiceStarted: Boolean = false
-    private var isIntentServiceStarted: Boolean = false
-    private var toast: Toast? = null
+    private lateinit var backgroundProgressReceiver: BackgroundProgressReceiver
+    internal var isServiceStarted: Boolean = false
+    internal var isIntentServiceStarted: Boolean = false
+    internal var toast: Toast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
 
 
     public override fun onPause() {
-        backgroundProgressReceiver?.let {
+        backgroundProgressReceiver.let {
             unregisterReceiver(backgroundProgressReceiver)
         }
         super.onPause()
@@ -75,9 +75,7 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun subscribeForProgressUpdates() {
 
-        if (backgroundProgressReceiver == null) {
-            backgroundProgressReceiver = BackgroundProgressReceiver()
-        }
+        backgroundProgressReceiver = BackgroundProgressReceiver()
         val progressUpdateActionFilter = IntentFilter(PROGRESS_UPDATE_ACTION)
         registerReceiver(backgroundProgressReceiver, progressUpdateActionFilter)
     }
@@ -100,9 +98,9 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             val msg = intent.getStringExtra(SERVICE_STATUS)
-            if (msg != null) {
+            msg?.let {
                 toast?.cancel()
-                toast = Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT)
+                toast = Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT)
                 toast?.show()
             }
 
