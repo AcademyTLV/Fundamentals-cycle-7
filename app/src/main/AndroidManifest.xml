@@ -17,6 +17,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".threads.AsyncTaskActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_async_task"
+            android:theme="@style/FullscreenTheme" />
+
+        <activity
+            android:name=".threads.ThreadsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_threads"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
