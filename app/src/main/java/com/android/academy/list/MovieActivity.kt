@@ -70,6 +70,12 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
                 return true
             }
 
+            R.id.action_open_background_service_activity -> {
+                // Open Thread Handler Activity
+                startActivity(Intent(this@MoviesActivity, BGServiceActivity::class.java))
+                return true
+            }
+
             R.id.action_delete -> {
                 AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
                 (movies_rv_list.adapter as MoviesViewAdapter).clearData()
