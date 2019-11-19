@@ -1,4 +1,4 @@
 # Fundamentals-2019
-Ex 4 - Fragments
+Ex 7 - Networking
 
-https://docs.google.com/presentation/d/1epA5cM7PxxamR_rHkGkzqxOTgH6hsIwMwpahU3-l-cA/edit?usp=sharing
+https://docs.google.com/presentation/d/11zw2LySuhzYNTGnIuOasHOT7Yazt9-nX6ILpk-TMXQg/edit?usp=sharing
