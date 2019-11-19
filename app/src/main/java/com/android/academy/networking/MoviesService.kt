@@ -32,8 +32,8 @@ interface MoviesService {
     @GET(POPULAR_QUERY_PATH)
     fun loadPopularMovies(): Call<MoviesListResult>
 
-//    @GET(VIDEOS_QUERY_PATH)
-//    abstract fun getVideos(@Path(MOVIE_ID_KEY) movieId: Int): Call<VideosListResult>
+    @GET(VIDEOS_QUERY_PATH)
+    fun getTrailers(@Path(MOVIE_ID_KEY) movieId: Int): Call<TrailersListResult>
 
 
 }

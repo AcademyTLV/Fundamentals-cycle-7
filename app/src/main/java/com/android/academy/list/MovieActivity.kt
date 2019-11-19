@@ -2,6 +2,8 @@ package com.android.academy.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.R
@@ -20,7 +22,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
-
+        main_progress.visibility = View.VISIBLE
         loadMovies()
         with(movies_rv_list) {
             setHasFixedSize(true)
@@ -39,15 +41,21 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
 
     private fun loadMovies() {
-        RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult>{
+        RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult> {
             override fun onFailure(call: Call<MoviesListResult>, t: Throwable) {
-                println("No")
+                main_progress.visibility = View.GONE
+                Toast.makeText(
+                    this@MoviesActivity,
+                    R.string.something_went_wrong,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             override fun onResponse(
                 call: Call<MoviesListResult>,
                 response: Response<MoviesListResult>
             ) {
+                main_progress.visibility = View.GONE
                 response.body()?.let {
                     val convertedList =
                         MovieModelConverter.convertNetworkMovieToModel(it)
@@ -56,7 +64,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
                         addAll(convertedList)
                     }
                     movies_rv_list.adapter?.notifyDataSetChanged()
-                    println("hi ${response.body()?.results?.size}")
                 }
             }
 

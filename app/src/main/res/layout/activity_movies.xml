@@ -5,9 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".list.MoviesActivity">
 
+    <ProgressBar
+        android:id="@+id/main_progress"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_gravity="center"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/movies_rv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:visibility="gone"
         tools:listitem="@layout/item_movie" />
 </FrameLayout>

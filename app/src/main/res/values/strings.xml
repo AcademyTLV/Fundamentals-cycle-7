@@ -14,4 +14,7 @@
 	<string name="details_release_text">Released: </string>
 	<string name="details_trailer_text">Movie Trailer</string>
 	<string name="details_overview_text">Overview: </string>
+	<string name="something_went_wrong">Something went wrong :\</string>
+	<string name="details_loading_trailer_text">Loading…</string>
+
 </resources>
