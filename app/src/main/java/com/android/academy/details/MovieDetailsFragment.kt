@@ -53,8 +53,8 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
 
     private fun setMovie() {
         movieModel?.let {
-            details_iv_image.setImageResource(it.imageRes)
-            details_iv_back.setImageResource(it.backImageRes)
+//            details_iv_image.setImageResource(it.imageUrl)
+//            details_iv_back.setImageResource(it.backImageUrl)
             details_tv_title.text = it.name
             details_tv_released_date.text = it.releaseDate
             details_tv_overview_text.text = it.overview
@@ -62,11 +62,6 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        movieModel?.trailerUrl?.let { trailerUrl ->
-            if (trailerUrl.isNotBlank()) {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
-                startActivity(browserIntent)
-            }
-        }
+
     }
 }

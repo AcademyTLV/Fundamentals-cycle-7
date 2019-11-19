@@ -9,12 +9,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.R
 import com.android.academy.model.MovieModel
+import com.squareup.picasso.Picasso
 
 class MoviesViewAdapter(
     private val movies: List<MovieModel>,
     private val movieClickListener: OnMovieClickListener?,
     context: Context
 ) : RecyclerView.Adapter<MoviesViewAdapter.ViewHolder>() {
+
+    val picasso = Picasso.get()
 
     private val mLayoutInflater: LayoutInflater = context
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -41,7 +44,7 @@ class MoviesViewAdapter(
         }
 
         fun bind(movieModel: MovieModel) {
-            ivImage.setImageResource(movieModel.imageRes)
+            picasso.load(movieModel.imageUrl).into(ivImage)
             tvTitle.text = movieModel.name
             tvOverview.text = movieModel.overview
         }

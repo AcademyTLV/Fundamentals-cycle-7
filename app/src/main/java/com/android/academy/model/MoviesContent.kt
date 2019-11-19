@@ -4,7 +4,7 @@ import java.util.*
 
 object MoviesContent {
 
-    val movies = ArrayList<MovieModel>()
+    val movies = mutableListOf<MovieModel>()
 
     fun clear() {
         movies.clear()
