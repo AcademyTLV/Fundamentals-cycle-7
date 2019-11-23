@@ -19,6 +19,16 @@
             android:scaleType="centerCrop"
             android:src="@drawable/infinity_war_background" />
 
+        <ImageButton
+            android:id="@+id/details_ib_download"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/spacing_s"
+            android:layout_alignBottom="@+id/details_iv_back"
+            android:background="@drawable/download_btn_selector"
+            android:src="@android:drawable/stat_sys_download" />
+
         <ImageView
             android:id="@+id/details_iv_image"
             android:layout_width="116dp"

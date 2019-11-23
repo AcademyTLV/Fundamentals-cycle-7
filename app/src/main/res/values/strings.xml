@@ -17,4 +17,15 @@
 	<string name="something_went_wrong">Something went wrong :\</string>
 	<string name="details_loading_trailer_text">Loading…</string>
 
+	<string name="notification_title">Downloading…</string>
+	<string name="notification_message">%1$d %%</string>
+	<string name="channel_name">Default channel</string>
+	<string name="channel_description">It is a channel for default notifications</string>
+
+	<string name="download_dialog_title">Permission needed</string>
+	<string name="download_dialog_message">To be able downloading requested file the app need to be granted to access your files</string>
+	<string name="download_dialog_ok">OK</string>
+	<string name="download_dialog_cancel">Cancel</string>
+	<string name="download_image_description">Main image</string>
+
 </resources>

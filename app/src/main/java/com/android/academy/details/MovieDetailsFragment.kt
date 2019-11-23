@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.android.academy.R
+import com.android.academy.download.DownloadActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.networking.MoviesService
 import com.android.academy.networking.RestClient
@@ -60,6 +61,7 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         details_btn_trailer.setOnClickListener(this)
+        details_ib_download.setOnClickListener(this)
 
         setMovie()
     }
@@ -76,34 +78,46 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View) {
         movieModel?.let {
-            setButtonLoadingStatus()
-            RestClient.moviesService.getTrailers(it.movieId).enqueue(object :
-                Callback<TrailersListResult> {
-                override fun onFailure(call: Call<TrailersListResult>, t: Throwable) {
-                    resetButtonStatus()
-                    Toast.makeText(
-                        context,
-                        R.string.something_went_wrong,
-                        Toast.LENGTH_SHORT
-                    ).show()
+            when (view.id){
+                details_btn_trailer.id -> {
+                    setButtonLoadingStatus()
+                    getMovieVideos(it)
                 }
+                details_ib_download.id -> {
+                    downloadImage()
+                }
+            }
+        }
+    }
 
-                override fun onResponse(
-                    call: Call<TrailersListResult>,
-                    response: Response<TrailersListResult>
-                ) {
-                    resetButtonStatus()
-                    response.body()?.let {
-                        it.results.firstOrNull()?.key?.let {
-                            val trailerUrl = "${MoviesService.YOUTUBE_BASE_URL}$it"
-                            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
-                            startActivity(browserIntent)
-                        }
+    private fun getMovieVideos(it: MovieModel) {
+        RestClient.moviesService.getTrailers(it.movieId).enqueue(object :
+            Callback<TrailersListResult> {
+            override fun onFailure(call: Call<TrailersListResult>, t: Throwable) {
+                resetButtonStatus()
+                Toast.makeText(
+                    context,
+                    R.string.something_went_wrong,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onResponse(
+                call: Call<TrailersListResult>,
+                response: Response<TrailersListResult>
+            ) {
+                resetButtonStatus()
+                response.body()?.let {
+                    it.results.firstOrNull()?.key?.let {
+                        val trailerUrl = "${MoviesService.YOUTUBE_BASE_URL}$it"
+                        val browserIntent =
+                            Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
+                        startActivity(browserIntent)
                     }
                 }
+            }
 
-            })
-        }
+        })
     }
 
     private fun setButtonLoadingStatus() {
@@ -121,5 +135,14 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     private fun resetButtonStatus() {
         details_btn_trailer.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         details_btn_trailer.setText(R.string.details_trailer_text)
+    }
+
+    private fun downloadImage() {
+        val context = context
+        if (movieModel == null || context == null) return
+            movieModel?.let {
+                DownloadActivity.startActivity(context, it)
+            }
+
     }
 }
