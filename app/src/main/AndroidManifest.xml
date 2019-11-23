@@ -36,15 +36,15 @@
             android:theme="@style/AppTheme"></activity>
 
         <activity
-            android:name=".BackgroundServices.BGServiceActivity"
+            android:name=".background_services.BGServiceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme" />
 
         <service
-            android:name=".BackgroundServices.HardJobService"
+            android:name=".background_services.HardJobService"
             android:exported="false" />
         <service
-            android:name=".BackgroundServices.HardJobIntentService"
+            android:name=".background_services.HardJobIntentService"
             android:exported="false"></service>
     </application>
 

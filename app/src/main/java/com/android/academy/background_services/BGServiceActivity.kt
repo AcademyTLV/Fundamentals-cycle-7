@@ -1,4 +1,4 @@
-package com.android.academy.BackgroundServices
+package com.android.academy.background_services
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -21,7 +21,7 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
         const val SERVICE_STATUS: String = "SERVICE_STATUS"
     }
 
-    private lateinit var backgroundProgressReceiver: BackgroundProgressReceiver
+    private  val backgroundProgressReceiver = BackgroundProgressReceiver()
     internal var isServiceStarted: Boolean = false
     internal var isIntentServiceStarted: Boolean = false
     internal var toast: Toast? = null
@@ -36,14 +36,13 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
 
     public override fun onResume() {
         super.onResume()
-        subscribeForProgressUpdates()
+       //subscribeForProgressUpdates
+        registerReceiver(backgroundProgressReceiver, IntentFilter(PROGRESS_UPDATE_ACTION))
     }
 
 
     public override fun onPause() {
-        backgroundProgressReceiver.let {
-            unregisterReceiver(backgroundProgressReceiver)
-        }
+        unregisterReceiver(backgroundProgressReceiver)
         super.onPause()
     }
 
@@ -73,12 +72,6 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun subscribeForProgressUpdates() {
-
-        backgroundProgressReceiver = BackgroundProgressReceiver()
-        val progressUpdateActionFilter = IntentFilter(PROGRESS_UPDATE_ACTION)
-        registerReceiver(backgroundProgressReceiver, progressUpdateActionFilter)
-    }
 
     inner class BackgroundProgressReceiver : BroadcastReceiver() {
 

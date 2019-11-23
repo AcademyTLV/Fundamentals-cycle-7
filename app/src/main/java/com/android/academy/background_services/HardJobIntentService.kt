@@ -1,4 +1,4 @@
-package com.android.academy.BackgroundServices
+package com.android.academy.background_services
 
 import android.app.IntentService
 import android.content.Intent
