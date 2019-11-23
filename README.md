@@ -1,4 +1,4 @@
 # Fundamentals-2019
-Ex 5 - Threads
+Ex 6 - Backgroun_Service
 
-https://docs.google.com/presentation/d/1SBpF7rJAuZhsaNIHzjJmyjAWMyvWZBZ51CcMIyAlNgw/edit?usp=sharing
+https://github.com/AcademyTLV/Fundamentals-cycle-7/tree/ex-6-backgroun_service

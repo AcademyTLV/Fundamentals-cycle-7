@@ -6,7 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.academy.BackgroundServices.BGServiceActivity
+import com.android.academy.background_services.BGServiceActivity
 import com.android.academy.R
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
