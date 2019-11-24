@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.android.academy.R
 import com.android.academy.model.MovieModel
 import com.android.academy.networking.MoviesService
+import com.android.academy.networking.NetworkingConstants.YOUTUBE_BASE_URL
 import com.android.academy.networking.RestClient
 import com.android.academy.networking.TrailersListResult
 import com.squareup.picasso.Picasso
@@ -95,7 +96,7 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
                     resetButtonStatus()
                     response.body()?.let {
                         it.results.firstOrNull()?.key?.let {
-                            val trailerUrl = "${MoviesService.YOUTUBE_BASE_URL}$it"
+                            val trailerUrl = "${YOUTUBE_BASE_URL}$it"
                             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
                             startActivity(browserIntent)
                         }

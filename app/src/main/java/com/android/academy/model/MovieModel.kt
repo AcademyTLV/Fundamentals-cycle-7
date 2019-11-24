@@ -1,10 +1,9 @@
 package com.android.academy.model
 
-import android.os.Parcel
 import android.os.Parcelable
-import androidx.annotation.DrawableRes
 import com.android.academy.networking.MoviesListResult
-import com.android.academy.networking.MoviesService
+import com.android.academy.networking.NetworkingConstants.BACKDROP_BASE_URL
+import com.android.academy.networking.NetworkingConstants.POSTER_BASE_URL
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -24,9 +23,9 @@ object MovieModelConverter {
             MovieModel(
                 movieId = it.id,
                 name = it.title,
-                imageUrl = "${MoviesService.POSTER_BASE_URL}${it.posterPath}",
+                imageUrl = "${POSTER_BASE_URL}${it.posterPath}",
                 overview = it.overview,
-                backImageUrl = "${MoviesService.BACKDROP_BASE_URL}${it.backdropPath}",
+                backImageUrl = "${BACKDROP_BASE_URL}${it.backdropPath}",
                 releaseDate = it.release_date
             )
         }
