@@ -21,12 +21,8 @@ open class HardJobIntentService : IntentService(TAG) {
         var i = 0
         while (i <= 100 && !isDestroyed) {
             SystemClock.sleep(100)
-            val broadcastIntent =
-                Intent(BGServiceActivity.PROGRESS_UPDATE_ACTION)
-            broadcastIntent.putExtra(
-                BGServiceActivity.PROGRESS_VALUE_KEY,
-                i
-            )
+            val broadcastIntent = Intent(BGServiceActivity.PROGRESS_UPDATE_ACTION)
+            broadcastIntent.putExtra(BGServiceActivity.PROGRESS_VALUE_KEY, i)
             sendBroadcast(broadcastIntent)
             i++
         }
