@@ -150,5 +150,18 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         ).show()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_delete -> {
+                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
+                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
+            }
+        }
+        return true
     }
 }

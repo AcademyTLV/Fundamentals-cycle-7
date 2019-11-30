@@ -118,7 +118,6 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
                     }
                 }
             }
-
         })
     }
 
