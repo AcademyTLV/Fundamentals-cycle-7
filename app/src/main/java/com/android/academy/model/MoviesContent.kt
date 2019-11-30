@@ -1,7 +1,5 @@
 package com.android.academy.model
 
-import java.util.*
-
 object MoviesContent {
 
     val movies = mutableListOf<MovieModel>()

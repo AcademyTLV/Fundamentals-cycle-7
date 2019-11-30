@@ -14,8 +14,10 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.android.academy.R
+import com.android.academy.db.AppDatabase
 import com.android.academy.model.MovieModel
-import com.android.academy.networking.MoviesService
+import com.android.academy.model.MovieModelConverter
+import com.android.academy.model.VideoModel
 import com.android.academy.networking.NetworkingConstants.YOUTUBE_BASE_URL
 import com.android.academy.networking.RestClient
 import com.android.academy.networking.TrailersListResult
@@ -76,35 +78,56 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        movieModel?.let {
+        movieModel?.let { movieModel ->
             setButtonLoadingStatus()
-            RestClient.moviesService.getTrailers(it.movieId).enqueue(object :
-                Callback<TrailersListResult> {
-                override fun onFailure(call: Call<TrailersListResult>, t: Throwable) {
-                    resetButtonStatus()
-                    Toast.makeText(
-                        context,
-                        R.string.something_went_wrong,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
 
-                override fun onResponse(
-                    call: Call<TrailersListResult>,
-                    response: Response<TrailersListResult>
-                ) {
+            context?.let {
+                val videoModel: VideoModel? =
+                    AppDatabase.getInstance(context!!)?.videoDao()?.getVideo(movieModel.movieId)
+                videoModel?.let {
                     resetButtonStatus()
-                    response.body()?.let {
-                        it.results.firstOrNull()?.key?.let {
-                            val trailerUrl = "${YOUTUBE_BASE_URL}$it"
-                            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
-                            startActivity(browserIntent)
-                        }
+                    startActivityWithTrailer(videoModel.key)
+                    return
+                }
+            }
+            getTrailersFromServer(movieModel)
+        }
+    }
+
+    private fun getTrailersFromServer(it: MovieModel) {
+        RestClient.moviesService.getTrailers(it.movieId).enqueue(object :
+            Callback<TrailersListResult> {
+            override fun onFailure(call: Call<TrailersListResult>, t: Throwable) {
+                resetButtonStatus()
+                Toast.makeText(
+                    context,
+                    R.string.something_went_wrong,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onResponse(
+                call: Call<TrailersListResult>,
+                response: Response<TrailersListResult>
+            ) {
+                resetButtonStatus()
+                response.body()?.let { result ->
+                    val convertedVideoModel: VideoModel? =
+                        MovieModelConverter.convertVideoResult(result)
+                    result.results.firstOrNull()?.key?.let {
+                        startActivityWithTrailer(it)
+                        AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedVideoModel)
                     }
                 }
+            }
 
-            })
-        }
+        })
+    }
+
+    private fun startActivityWithTrailer(it: String) {
+        val trailerUrl = "${YOUTUBE_BASE_URL}$it"
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
+        startActivity(browserIntent)
     }
 
     private fun setButtonLoadingStatus() {
@@ -116,7 +139,12 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
         anim.repeatCount = ValueAnimator.INFINITE
         anim.start()
         details_btn_trailer.setText(R.string.details_loading_trailer_text)
-        details_btn_trailer.setCompoundDrawablesWithIntrinsicBounds(rotateDrawable, null, null, null)
+        details_btn_trailer.setCompoundDrawablesWithIntrinsicBounds(
+            rotateDrawable,
+            null,
+            null,
+            null
+        )
     }
 
     private fun resetButtonStatus() {
