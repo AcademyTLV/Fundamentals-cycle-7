@@ -20,11 +20,11 @@ object MovieModelConverter {
         }
     }
 
-    fun convertVideoResult(videosListResult: TrailersListResult): VideoModel? {
-        val results: List<TrailerResult> = videosListResult.results
+    fun convertTrailerResult(trailerListResult: TrailersListResult): TrailerModel? {
+        val results: List<TrailerResult> = trailerListResult.results
         if (results.isNotEmpty()) {
             val videoResult: TrailerResult = results[0]
-            return VideoModel(videosListResult.id, videoResult.id, videoResult.key)
+            return TrailerModel(trailerListResult.id, videoResult.id, videoResult.key)
         }
         return null
     }

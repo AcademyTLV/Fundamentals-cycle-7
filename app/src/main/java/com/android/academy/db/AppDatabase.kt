@@ -5,14 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.android.academy.model.MovieModel
-import com.android.academy.model.VideoModel
+import com.android.academy.model.TrailerModel
 
 
-@Database(entities = [MovieModel::class, VideoModel::class], version = 1)
+@Database(entities = [MovieModel::class, TrailerModel::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao?
-    abstract fun videoDao(): VideoDao?
+    abstract fun videoDao(): TrailerDao?
 
     companion object {
 

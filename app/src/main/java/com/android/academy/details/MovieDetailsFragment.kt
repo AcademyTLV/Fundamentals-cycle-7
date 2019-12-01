@@ -17,7 +17,7 @@ import com.android.academy.R
 import com.android.academy.db.AppDatabase
 import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
-import com.android.academy.model.VideoModel
+import com.android.academy.model.TrailerModel
 import com.android.academy.networking.NetworkingConstants.YOUTUBE_BASE_URL
 import com.android.academy.networking.RestClient
 import com.android.academy.networking.TrailersListResult
@@ -82,11 +82,11 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
             setButtonLoadingStatus()
 
             context?.let {
-                val videoModel: VideoModel? =
+                val trailerModel: TrailerModel? =
                     AppDatabase.getInstance(context!!)?.videoDao()?.getVideo(movieModel.movieId)
-                videoModel?.let {
+                trailerModel?.let {
                     resetButtonStatus()
-                    startActivityWithTrailer(videoModel.key)
+                    startActivityWithTrailer(trailerModel.key)
                     return
                 }
             }
@@ -112,11 +112,11 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
             ) {
                 resetButtonStatus()
                 response.body()?.let { result ->
-                    val convertedVideoModel: VideoModel? =
-                        MovieModelConverter.convertVideoResult(result)
+                    val convertedTrailerModel: TrailerModel? =
+                        MovieModelConverter.convertTrailerResult(result)
                     result.results.firstOrNull()?.key?.let {
                         startActivityWithTrailer(it)
-                        AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedVideoModel)
+                        AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
                     }
                 }
             }
