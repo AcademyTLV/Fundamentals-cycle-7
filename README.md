@@ -1,4 +1,4 @@
 # Fundamentals-2019
-Ex 7 - Networking
+Ex 8 - Room
 
-https://docs.google.com/presentation/d/11zw2LySuhzYNTGnIuOasHOT7Yazt9-nX6ILpk-TMXQg/edit?usp=sharing
+https://docs.google.com/presentation/d/16V-KHJErkVsIoeGxYKr0xNLmKzwSsohTIi0VaiOraFU/edit?usp=sharing
