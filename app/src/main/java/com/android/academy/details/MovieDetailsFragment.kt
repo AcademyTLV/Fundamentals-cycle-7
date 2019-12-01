@@ -112,16 +112,19 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
             ) {
                 resetButtonStatus()
                 response.body()?.let { result ->
-                    val convertedTrailerModel: TrailerModel? =
-                        MovieModelConverter.convertTrailerResult(result)
                     result.results.firstOrNull()?.key?.let {
                         startActivityWithTrailer(it)
-                        AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
+                        saveTrailerResultToDb(result)
                     }
                 }
             }
 
         })
+    }
+
+    private fun saveTrailerResultToDb(result: TrailersListResult): Unit? {
+        val convertedTrailerModel: TrailerModel? = MovieModelConverter.convertTrailerResult(result)
+        return AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
     }
 
     private fun startActivityWithTrailer(it: String) {
