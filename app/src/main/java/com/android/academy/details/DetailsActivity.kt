@@ -34,5 +34,4 @@ class DetailsActivity : AppCompatActivity() {
             return MovieDetailsFragment.newInstance(MoviesContent.movies[position])
         }
     }
-
 }

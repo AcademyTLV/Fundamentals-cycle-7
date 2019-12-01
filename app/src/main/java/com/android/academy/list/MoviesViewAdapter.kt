@@ -12,12 +12,12 @@ import com.android.academy.model.MovieModel
 import com.squareup.picasso.Picasso
 
 class MoviesViewAdapter(
-    private val movies: List<MovieModel>,
+    private val movies: MutableList<MovieModel>,
     private val movieClickListener: OnMovieClickListener?,
     context: Context
 ) : RecyclerView.Adapter<MoviesViewAdapter.ViewHolder>() {
 
-    val picasso = Picasso.get()
+    val picasso: Picasso = Picasso.get()
 
     private val mLayoutInflater: LayoutInflater = context
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -52,5 +52,10 @@ class MoviesViewAdapter(
         override fun onClick(view: View) {
             movieClickListener?.onMovieClicked(adapterPosition)
         }
+    }
+
+    fun clearData() {
+        movies.clear()
+        notifyDataSetChanged()
     }
 }
