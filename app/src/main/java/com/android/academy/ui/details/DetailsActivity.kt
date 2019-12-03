@@ -19,19 +19,12 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        details_vp_container.adapter = SectionsPagerAdapter(supportFragmentManager)
-
-        val startPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, 0)
-        details_vp_container.setCurrentItem(startPosition, false)
+        setSectionsPagerAdapter()
     }
 
-    inner class SectionsPagerAdapter(fm: FragmentManager) :
-        FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
-        override fun getCount() = MoviesContent.movies.size
-
-        override fun getItem(position: Int): Fragment {
-            return MovieDetailsFragment.newInstance(MoviesContent.movies[position])
-        }
+    private fun setSectionsPagerAdapter() {
+        details_vp_container.adapter = SectionsPagerAdapter(supportFragmentManager)
+        val startPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, 0)
+        details_vp_container.setCurrentItem(startPosition, false)
     }
 }
