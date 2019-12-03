@@ -34,9 +34,13 @@ class DownloadService : Service() {
         }
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        startForeground()
+    }
+
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d("TAG", "DownloadService # onStartCommand")
-        startForeground()
 
         var url = intent.getStringExtra(URL)
         Log.d("TAG", "DownloadService # URL: " + url)
