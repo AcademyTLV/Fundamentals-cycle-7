@@ -1,4 +1,4 @@
-package com.android.academy.details
+package com.android.academy.ui.details
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

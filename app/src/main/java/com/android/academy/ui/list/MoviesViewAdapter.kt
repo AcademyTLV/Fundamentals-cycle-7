@@ -1,4 +1,4 @@
-package com.android.academy.list
+package com.android.academy.ui.list
 
 import android.content.Context
 import android.view.LayoutInflater

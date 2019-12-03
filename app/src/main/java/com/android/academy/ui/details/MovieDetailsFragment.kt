@@ -1,4 +1,4 @@
-package com.android.academy.details
+package com.android.academy.ui.details
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator

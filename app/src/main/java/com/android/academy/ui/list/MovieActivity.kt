@@ -1,8 +1,7 @@
-package com.android.academy.list
+package com.android.academy.ui.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.R
 import com.android.academy.db.AppDatabase
-import com.android.academy.details.DetailsActivity
+import com.android.academy.ui.details.DetailsActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.MoviesContent
