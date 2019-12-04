@@ -52,21 +52,20 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
         Log.d(TAG, "movieModel: " + movieModel!!)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setClickListeners()
+        setMovie()
+    }
+
+    private fun setClickListeners() {
         details_btn_trailer.setOnClickListener(this)
         details_ib_download.setOnClickListener(this)
-
-        setMovie()
     }
 
     private fun setMovie() {
@@ -109,26 +108,34 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
         RestClient.moviesService.getTrailers(movieModel.movieId).enqueue(object :
             Callback<TrailersListResult> {
             override fun onFailure(call: Call<TrailersListResult>, t: Throwable) {
-                resetButtonStatus()
-                Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+                onFailedGettingTrailerFromServer()
             }
 
             override fun onResponse(call: Call<TrailersListResult>, response: Response<TrailersListResult>) {
-                resetButtonStatus()
-                response.body()?.let { result ->
-                    result.results.firstOrNull()?.key?.let { key->
-                        startActivityWithTrailer(key)
-                        saveTrailerResultToDb(result)
-                    }
-                }
+                onTrailerReceivedFromServer(response)
             }
 
         })
     }
 
-    private fun saveTrailerResultToDb(result: TrailersListResult){
+    private fun onTrailerReceivedFromServer(response: Response<TrailersListResult>) {
+        resetButtonStatus()
+        response.body()?.let { result ->
+            result.results.firstOrNull()?.key?.let { key ->
+                startActivityWithTrailer(key)
+                saveTrailerResultToDb(result)
+            }
+        }
+    }
+
+    private fun saveTrailerResultToDb(result: TrailersListResult) {
         val convertedTrailerModel: TrailerModel? = MovieModelConverter.convertTrailerResult(result)
         AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
+    }
+
+    private fun onFailedGettingTrailerFromServer() {
+        resetButtonStatus()
+        Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
     }
 
     private fun startActivityWithTrailer(it: String) {
