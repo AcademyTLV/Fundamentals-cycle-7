@@ -29,8 +29,13 @@ class HardWorker(context: Context, workerParams: WorkerParameters) :
             applicationContext.sendBroadcast(broadcastIntent)
             i++
         }
-        showToast(applicationContext.getString(R.string.finishing_worker_msg))
-        return Result.success()
+        return if (i < 100) {
+            showToast(applicationContext.getString(R.string.worker_failure_msg))
+            Result.failure()
+        } else {
+            showToast(applicationContext.getString(R.string.finishing_worker_msg))
+            Result.success()
+        }
     }
 
     private fun showToast(msg: String) {

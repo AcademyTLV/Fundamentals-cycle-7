@@ -52,6 +52,7 @@
 	<string name="worker_work_done">Work Done</string>
 	<string name="starting_worker_msg">Starting Work</string>
 	<string name="finishing_worker_msg">Finishing Work</string>
+	<string name="worker_failure_msg">Work failure</string>
 	<string name="worker_constraint_network">Required Network</string>
 	<string name="worker_constraint_charging">Requires Charging</string>
 	<string name="worker_constraint_battery">Requires Battery Not Low</string>
