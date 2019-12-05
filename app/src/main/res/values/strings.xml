@@ -43,6 +43,17 @@
 	<string name="start_intent_service">Start IntentService</string>
 	<string name="start_service">Start Service</string>
 	<string name="the_progress">The progress</string>
-    <string name="open_background_service_activity">Open Background Service Activity</string>
+	<string name="open_background_service_activity">Open Background Service Activity</string>
+
+	<string name="open_worker_activity">Open WorkerManager Activity</string>
+	<string name="worker_title_progress">Worker progress</string>
+	<string name="worker_enqueue_work">Enqueue Work</string>
+	<string name="worker_cancel_work">Cancel Work</string>
+	<string name="worker_work_done">Work Done</string>
+	<string name="starting_worker_msg">Starting Work</string>
+	<string name="finishing_worker_msg">Finishing Work</string>
+	<string name="worker_constraint_network">Required Network</string>
+	<string name="worker_constraint_charging">Requires Charging</string>
+	<string name="worker_constraint_battery">Requires Battery Not Low</string>
 
 </resources>

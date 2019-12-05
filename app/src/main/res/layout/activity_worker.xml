@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".background_services.WorkerActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/worker_tv_progress_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/worker_title_progress"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1" />
+
+        <TextView
+            android:id="@+id/worker_tv_progress_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/worker_tv_progress_title"
+            tools:text="87%" />
+
+        <Switch
+            android:id="@+id/worker_switch_network"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_l"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:layout_marginEnd="@dimen/spacing_l"
+            android:text="@string/worker_constraint_network"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/worker_tv_progress_value" />
+
+        <Switch
+            android:id="@+id/worker_switch_charging"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_l"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:layout_marginEnd="@dimen/spacing_l"
+            android:text="@string/worker_constraint_charging"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/worker_switch_network" />
+
+        <Switch
+            android:id="@+id/worker_switch_battery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_l"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:layout_marginEnd="@dimen/spacing_l"
+            android:text="@string/worker_constraint_battery"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/worker_switch_charging" />
+
+        <Button
+            android:id="@+id/worker_btn_start"
+            android:layout_width="160dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:text="@string/worker_enqueue_work"
+            app:layout_constraintEnd_toStartOf="@+id/worker_btn_stop"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/worker_switch_battery" />
+
+        <Button
+            android:id="@+id/worker_btn_stop"
+            android:layout_width="160dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:text="@string/worker_cancel_work"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/worker_btn_start"
+            app:layout_constraintTop_toBottomOf="@+id/worker_switch_battery" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
