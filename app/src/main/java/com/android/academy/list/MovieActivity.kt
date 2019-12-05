@@ -15,7 +15,6 @@ import com.android.academy.db.AppDatabase
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
-import com.android.academy.model.MoviesContent.movies
 import com.android.academy.model.MoviesContent
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
@@ -80,12 +79,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
             R.id.action_open_worker_activity -> {
                 // Open Work Manager Activity
                 WorkerActivity.open(this@MoviesActivity)
-                return true
-            }
-
-            R.id.action_delete -> {
-                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
-                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
                 return true
             }
 
