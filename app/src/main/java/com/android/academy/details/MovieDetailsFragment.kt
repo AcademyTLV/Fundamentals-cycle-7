@@ -122,11 +122,10 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
                     }
                 }
             }
-
         })
     }
 
-    private fun saveTrailerResultToDb(result: TrailersListResult){
+    private fun saveTrailerResultToDb(result: TrailersListResult) {
         val convertedTrailerModel: TrailerModel? = MovieModelConverter.convertTrailerResult(result)
         AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
     }

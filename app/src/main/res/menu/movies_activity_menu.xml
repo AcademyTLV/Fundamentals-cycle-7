@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_delete"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_delete_forever_black_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_open_async_task"
+        android:title="@string/open_async_task_activity"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_open_thread_handler"
+        android:title="@string/open_thread_handler_activity"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_open_background_service_activity"
+        android:title="@string/open_background_service_activity"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_open_worker_activity"
+        android:title="@string/open_worker_activity"
+        app:showAsAction="never"/>
+</menu>

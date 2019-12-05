@@ -2,7 +2,6 @@ package com.android.academy.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +9,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.R
+import com.android.academy.background_services.BGServiceActivity
+import com.android.academy.background_services.WorkerActivity
 import com.android.academy.db.AppDatabase
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
@@ -17,6 +18,8 @@ import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.MoviesContent
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
+import com.android.academy.threads.AsyncTaskActivity
+import com.android.academy.threads.ThreadsActivity
 import kotlinx.android.synthetic.main.activity_movies.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,6 +50,47 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         startActivity(intent)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.movies_activity_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_open_async_task -> {
+                // Open Async Task Activity
+                startActivity(Intent(this@MoviesActivity, AsyncTaskActivity::class.java))
+                return true
+            }
+
+            R.id.action_open_thread_handler -> {
+                // Open Thread Handler Activity
+                startActivity(Intent(this@MoviesActivity, ThreadsActivity::class.java))
+                return true
+            }
+
+            R.id.action_open_background_service_activity -> {
+                // Open Thread Handler Activity
+                startActivity(Intent(this@MoviesActivity, BGServiceActivity::class.java))
+                return true
+            }
+
+            R.id.action_open_worker_activity -> {
+                // Open Work Manager Activity
+                WorkerActivity.open(this@MoviesActivity)
+                return true
+            }
+
+            R.id.action_delete -> {
+                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
+                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
+                return true
+            }
+        }
+        // Invoke the superclass to handle it.
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun loadMovies() {
         MoviesContent.clear()
@@ -102,18 +146,4 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         ).show()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_delete -> {
-                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
-                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
-            }
-        }
-        return true
-    }
 }
