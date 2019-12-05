@@ -22,21 +22,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".threads.AsyncTaskActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_async_task"
             android:theme="@style/FullscreenTheme" />
-
         <activity
             android:name=".threads.ThreadsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_threads"
-            android:theme="@style/AppTheme"></activity>
-
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".background_services.BGServiceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".background_services.WorkerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme" />
 
@@ -45,7 +46,7 @@
             android:exported="false" />
         <service
             android:name=".background_services.HardJobIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
 </manifest>
