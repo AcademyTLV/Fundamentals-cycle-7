@@ -89,7 +89,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         }
     }
 
-
     private fun loadMovies() {
         MoviesContent.clear()
         getCachedMoviesFromDataBase()

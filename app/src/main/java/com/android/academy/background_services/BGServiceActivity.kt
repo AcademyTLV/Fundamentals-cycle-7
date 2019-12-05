@@ -90,11 +90,11 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
                 tv_progress_value.text = text
             }
 
-            val msg = intent.getStringExtra(SERVICE_STATUS)
-            msg?.let {
+            intent.getStringExtra(SERVICE_STATUS)?.let {
                 toast?.cancel()
-                toast = Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT)
-                toast?.show()
+                toast = Toast.makeText(context, it, Toast.LENGTH_SHORT).also { newToast ->
+                    newToast.show()
+                }
             }
 
         }
