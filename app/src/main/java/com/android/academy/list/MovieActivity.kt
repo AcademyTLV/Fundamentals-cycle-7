@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.background_services.BGServiceActivity
 import com.android.academy.R
+import com.android.academy.background_services.WorkerActivity
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.MoviesContent.movies
@@ -67,6 +68,12 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
             R.id.action_open_background_service_activity -> {
                 // Open Thread Handler Activity
                 startActivity(Intent(this@MoviesActivity, BGServiceActivity::class.java))
+                return true
+            }
+
+            R.id.action_open_worker_activity -> {
+                // Open Work Manager Activity
+                WorkerActivity.open(this@MoviesActivity)
                 return true
             }
 
