@@ -6,7 +6,6 @@ import android.os.SystemClock
 
 import com.android.academy.R
 
-
 open class HardJobIntentService : IntentService(TAG) {
 
     companion object {

@@ -76,7 +76,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         }
     }
 
-
     private fun loadMovies() {
         RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult> {
             override fun onFailure(call: Call<MoviesListResult>, t: Throwable) {
