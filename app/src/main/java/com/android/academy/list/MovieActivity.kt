@@ -2,7 +2,6 @@ package com.android.academy.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -90,10 +89,14 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
                 return true
             }
 
-            else ->
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item)
+            R.id.action_delete -> {
+                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
+                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
+                return true
+            }
         }
+        // Invoke the superclass to handle it.
+        return super.onOptionsItemSelected(item)
     }
 
     private fun loadMovies() {
@@ -150,18 +153,4 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         ).show()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_delete -> {
-                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
-                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
-            }
-        }
-        return true
-    }
 }
