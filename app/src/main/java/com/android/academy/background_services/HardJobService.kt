@@ -9,9 +9,9 @@ import android.os.Looper
 import android.os.Message
 import android.os.Process
 import android.os.SystemClock
+import android.util.Log
 
 import com.android.academy.R
-
 
 open class HardJobService : Service() {
 
@@ -19,10 +19,8 @@ open class HardJobService : Service() {
         private const val TAG = "HardJobService"
     }
 
-
     private lateinit var serviceHandler: ServiceHandler
     private var isDestroyed = false
-
 
     override fun onCreate() {
         // To avoid cpu-blocking, we create a background handler to run our service
@@ -70,6 +68,7 @@ open class HardJobService : Service() {
                 val intent =
                     Intent(BGServiceActivity.PROGRESS_UPDATE_ACTION)
                 intent.putExtra(BGServiceActivity.PROGRESS_VALUE_KEY, i)
+                Log.d(TAG, "progress: $i")
                 sendBroadcast(intent)
                 i++
             }

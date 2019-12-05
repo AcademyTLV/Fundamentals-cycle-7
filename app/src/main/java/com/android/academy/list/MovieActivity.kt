@@ -69,7 +69,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         }
     }
 
-
     private fun loadMovies() {
         MoviesContent.addMovie(
             MovieModel(
