@@ -1,14 +1,15 @@
 package com.android.academy.ui.list
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.android.academy.model.MovieModel
 import com.android.academy.repos.MoviesRepository
 
-class MoviesViewModel : ViewModel() {
+class MoviesViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val moviesRepository = MoviesRepository()
+    private val moviesRepository = MoviesRepository(application)
 
     private val movies: MutableLiveData<List<MovieModel>> by lazy {
         MutableLiveData<List<MovieModel>>().also {
@@ -16,12 +17,12 @@ class MoviesViewModel : ViewModel() {
         }
     }
 
-    fun getMovies(): LiveData<List<MovieModel>> {
+    fun getMoviesFromServer(): LiveData<List<MovieModel>> {
         return movies
     }
 
     private fun loadMovies() {
-        moviesRepository.getMoviesFromServer().observeForever {
+        moviesRepository.getMovies().observeForever {
             it?.let { movies.postValue(it) }
         }
     }

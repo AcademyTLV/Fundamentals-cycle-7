@@ -28,31 +28,16 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
-        loadMovies()
         setRecyclerView()
-
-        getMoviesFromServer()
+        getMovies()
     }
 
-    private fun getCachedMoviesFromDataBase() {
-        val cachedMovies: List<MovieModel>? = AppDatabase.getInstance(this)?.movieDao()?.getAll()
-        cachedMovies?.let {
-            Log.d(TAG, "We got cached ${it.size} movies")
-
-            MoviesContent.movies.addAll(cachedMovies)
-            movies_rv_list.adapter?.notifyDataSetChanged()
-        }
-    }
-
-    private fun loadMovies() {
+    private fun getMovies() {
+        Log.d(TAG, "getMovies called")
         MoviesContent.clear()
-        getCachedMoviesFromDataBase()
         main_progress.visibility = View.VISIBLE
-    }
 
-    private fun getMoviesFromServer() {
-        moviesViewModel.getMovies().observe(this, Observer<List<MovieModel>> { movies ->
-            Log.d(TAG, "We got fresh ${movies.size} movies")
+        moviesViewModel.getMoviesFromServer().observe(this, Observer<List<MovieModel>> { movies ->
             main_progress.visibility = View.GONE
 
             if (movies.isEmpty()) {
