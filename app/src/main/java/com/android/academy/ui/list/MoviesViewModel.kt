@@ -17,7 +17,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun getMoviesFromServer(): LiveData<List<MovieModel>> {
+    fun getMovies(): LiveData<List<MovieModel>> {
         return movies
     }
 

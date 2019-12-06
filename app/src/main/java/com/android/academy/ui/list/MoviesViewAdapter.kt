@@ -54,6 +54,12 @@ class MoviesViewAdapter(
         }
     }
 
+    fun updateData(freshMovies: List<MovieModel>) {
+        movies.clear()
+        movies.addAll(freshMovies)
+        notifyDataSetChanged()
+    }
+
     fun clearData() {
         movies.clear()
         notifyDataSetChanged()

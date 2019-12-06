@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.R
 import com.android.academy.db.AppDatabase
 import com.android.academy.model.MovieModel
-import com.android.academy.model.MoviesContent
 import com.android.academy.ui.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_movies.*
 
@@ -32,16 +31,27 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         getMovies()
     }
 
+    private fun setRecyclerView() {
+        movies_rv_list.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = MoviesViewAdapter(
+                mutableListOf(),
+                this@MoviesActivity,
+                context
+            )
+        }
+    }
+
     private fun getMovies() {
         Log.d(TAG, "getMovies called")
-        MoviesContent.clear()
         main_progress.visibility = View.VISIBLE
 
-        moviesViewModel.getMoviesFromServer().observe(this, Observer<List<MovieModel>> { movies ->
+        moviesViewModel.getMovies().observe(this, Observer<List<MovieModel>> { movies ->
             main_progress.visibility = View.GONE
 
             if (movies.isEmpty()) {
-                onFailGettingDataFromServer()
+                Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
                 return@Observer
             }
 
@@ -49,45 +59,23 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         })
     }
 
-    private fun onFailGettingDataFromServer() {
-        Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
-    }
-
     private fun onFreshMoviesReceived(movies: List<MovieModel>) {
-        MoviesContent.movies.apply {
-            clear()
-            addAll(movies)
-        }
+        (movies_rv_list.adapter as MoviesViewAdapter).updateData(movies)
         movies_rv_list.adapter?.notifyDataSetChanged()
 
-        updateDbWithNewMovies()
+        updateDbWithNewMovies(movies)
     }
 
-
-    private fun setRecyclerView() {
-        movies_rv_list.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = MoviesViewAdapter(
-                MoviesContent.movies,
-                this@MoviesActivity,
-                context
-            )
-        }
-    }
-
-    private fun updateDbWithNewMovies() {
+    private fun updateDbWithNewMovies(movies: List<MovieModel>) {
         AppDatabase.getInstance(this)?.apply {
             movieDao()?.deleteAll()
-            movieDao()?.insertAll(MoviesContent.movies)
+            movieDao()?.insertAll(movies)
             Log.d(TAG, "DB Updated with fresh movies")
         }
     }
 
-
     // OnMovieClickListener interface
     override fun onMovieClicked(itemPosition: Int) {
-        if (itemPosition < 0 || itemPosition >= MoviesContent.movies.size) return
         startDetailsActivity(itemPosition)
     }
 
