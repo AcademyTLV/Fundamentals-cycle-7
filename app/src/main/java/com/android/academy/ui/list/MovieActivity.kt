@@ -2,11 +2,14 @@ package com.android.academy.ui.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.R
 import com.android.academy.db.AppDatabase
@@ -28,6 +31,15 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         setContentView(R.layout.activity_movies)
         loadMovies()
         setRecyclerView()
+
+        getViewModelAndObserve()
+    }
+
+    private fun getViewModelAndObserve() {
+        val model = ViewModelProviders.of(this)[MoviesViewModel::class.java]
+        model.getMovies().observe(this, Observer<List<MovieModel>> { movies ->
+            Log.d("MOVIES", "We got ${movies.size} movies")
+        })
     }
 
     private fun loadMovies() {
