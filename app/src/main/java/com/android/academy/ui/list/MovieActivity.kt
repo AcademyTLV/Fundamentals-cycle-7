@@ -24,6 +24,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+const val TAG = "MOVIESX"
+
 class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +40,16 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     private fun getViewModelAndObserve() {
         val model = ViewModelProviders.of(this)[MoviesViewModel::class.java]
         model.getMovies().observe(this, Observer<List<MovieModel>> { movies ->
-            Log.d("MOVIES", "We got ${movies.size} movies")
+            Log.d(TAG, "We got fresh ${movies.size} movies")
+
+            main_progress.visibility = View.GONE
+            MoviesContent.movies.apply {
+                clear()
+                addAll(movies)
+            }
+            movies_rv_list.adapter?.notifyDataSetChanged()
+
+            updateDbWithNewMovies()
         })
     }
 
@@ -46,7 +57,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         MoviesContent.clear()
         getCachedMoviesFromDataBase()
         main_progress.visibility = View.VISIBLE
-        getFreshMoviesFromServer()
     }
 
     private fun setRecyclerView() {
@@ -64,43 +74,18 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     private fun getCachedMoviesFromDataBase() {
         val cachedMovies: List<MovieModel>? = AppDatabase.getInstance(this)?.movieDao()?.getAll()
         cachedMovies?.let {
+            Log.d(TAG, "We got cached ${it.size} movies")
+
             MoviesContent.movies.addAll(cachedMovies)
             movies_rv_list.adapter?.notifyDataSetChanged()
         }
-    }
-
-    private fun getFreshMoviesFromServer() {
-        RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult> {
-            override fun onFailure(call: Call<MoviesListResult>, t: Throwable) {
-                onFailGettingDataFromServer()
-            }
-
-            override fun onResponse(call: Call<MoviesListResult>, response: Response<MoviesListResult>) {
-                onDataReceivedFromServer(response)
-            }
-        })
-    }
-
-    private fun onDataReceivedFromServer(response: Response<MoviesListResult>) {
-        main_progress.visibility = View.GONE
-        response.body()?.let { handleReceivedDataFromServer(it) }
-    }
-
-    private fun handleReceivedDataFromServer(it: MoviesListResult) {
-        val convertedList = MovieModelConverter.convertNetworkMovieToModel(it)
-        MoviesContent.movies.apply {
-            clear()
-            addAll(convertedList)
-        }
-        movies_rv_list.adapter?.notifyDataSetChanged()
-
-        updateDbWithNewMovies()
     }
 
     private fun updateDbWithNewMovies() {
         AppDatabase.getInstance(this)?.apply {
             movieDao()?.deleteAll()
             movieDao()?.insertAll(MoviesContent.movies)
+            Log.d(TAG, "DB Updated with fresh movies")
         }
     }
 

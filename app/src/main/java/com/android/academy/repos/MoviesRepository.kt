@@ -13,7 +13,7 @@ class MoviesRepository {
 
     val mutableLiveData = MutableLiveData<List<MovieModel>>()
 
-    fun getMovies() : MutableLiveData<List<MovieModel>> {
+    fun getMovies(): MutableLiveData<List<MovieModel>> {
         RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult> {
             override fun onFailure(call: Call<MoviesListResult>, t: Throwable) {
             }
