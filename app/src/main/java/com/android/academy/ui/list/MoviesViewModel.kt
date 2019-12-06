@@ -21,7 +21,7 @@ class MoviesViewModel : ViewModel() {
     }
 
     private fun loadMovies() {
-        moviesRepository.getMovies().observeForever {
+        moviesRepository.getMoviesFromServer().observeForever {
             it?.let { movies.postValue(it) }
         }
     }

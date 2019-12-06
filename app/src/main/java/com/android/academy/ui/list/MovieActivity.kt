@@ -14,19 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.R
 import com.android.academy.db.AppDatabase
 import com.android.academy.model.MovieModel
-import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.MoviesContent
-import com.android.academy.networking.MoviesListResult
-import com.android.academy.networking.RestClient
 import com.android.academy.ui.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_movies.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 const val TAG = "MOVIESX"
 
 class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
+
+    private val moviesViewModel: MoviesViewModel
+        get() = ViewModelProviders.of(this)[MoviesViewModel::class.java]
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +31,27 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         loadMovies()
         setRecyclerView()
 
-        getViewModelAndObserve()
+        getMoviesFromServer()
     }
 
-    private fun getViewModelAndObserve() {
-        val model = ViewModelProviders.of(this)[MoviesViewModel::class.java]
-        model.getMovies().observe(this, Observer<List<MovieModel>> { movies ->
+    private fun getCachedMoviesFromDataBase() {
+        val cachedMovies: List<MovieModel>? = AppDatabase.getInstance(this)?.movieDao()?.getAll()
+        cachedMovies?.let {
+            Log.d(TAG, "We got cached ${it.size} movies")
+
+            MoviesContent.movies.addAll(cachedMovies)
+            movies_rv_list.adapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun loadMovies() {
+        MoviesContent.clear()
+        getCachedMoviesFromDataBase()
+        main_progress.visibility = View.VISIBLE
+    }
+
+    private fun getMoviesFromServer() {
+        moviesViewModel.getMovies().observe(this, Observer<List<MovieModel>> { movies ->
             Log.d(TAG, "We got fresh ${movies.size} movies")
             main_progress.visibility = View.GONE
 
@@ -66,11 +78,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         updateDbWithNewMovies()
     }
 
-    private fun loadMovies() {
-        MoviesContent.clear()
-        getCachedMoviesFromDataBase()
-        main_progress.visibility = View.VISIBLE
-    }
 
     private fun setRecyclerView() {
         movies_rv_list.apply {
@@ -81,16 +88,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
                 this@MoviesActivity,
                 context
             )
-        }
-    }
-
-    private fun getCachedMoviesFromDataBase() {
-        val cachedMovies: List<MovieModel>? = AppDatabase.getInstance(this)?.movieDao()?.getAll()
-        cachedMovies?.let {
-            Log.d(TAG, "We got cached ${it.size} movies")
-
-            MoviesContent.movies.addAll(cachedMovies)
-            movies_rv_list.adapter?.notifyDataSetChanged()
         }
     }
 
