@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.android.academy.model.MovieModel
+import com.android.academy.repos.MoviesRepository
 
-class MoviesViewModel : ViewModel(){
+class MoviesViewModel : ViewModel() {
+
+    private val moviesRepository = MoviesRepository()
 
     private val movies: MutableLiveData<List<MovieModel>> by lazy {
         MutableLiveData<List<MovieModel>>().also {
@@ -18,6 +21,8 @@ class MoviesViewModel : ViewModel(){
     }
 
     private fun loadMovies() {
-        // TODO
+        moviesRepository.getMovies().observeForever {
+            it?.let { movies.postValue(it) }
+        }
     }
 }
