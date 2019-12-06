@@ -16,6 +16,7 @@ class MoviesRepository {
     fun getMovies(): MutableLiveData<List<MovieModel>> {
         RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult> {
             override fun onFailure(call: Call<MoviesListResult>, t: Throwable) {
+                mutableLiveData.value = listOf()
             }
 
             override fun onResponse(call: Call<MoviesListResult>, response: Response<MoviesListResult>) {

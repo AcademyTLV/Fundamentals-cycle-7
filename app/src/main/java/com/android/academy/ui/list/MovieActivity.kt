@@ -41,16 +41,29 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         val model = ViewModelProviders.of(this)[MoviesViewModel::class.java]
         model.getMovies().observe(this, Observer<List<MovieModel>> { movies ->
             Log.d(TAG, "We got fresh ${movies.size} movies")
-
             main_progress.visibility = View.GONE
-            MoviesContent.movies.apply {
-                clear()
-                addAll(movies)
-            }
-            movies_rv_list.adapter?.notifyDataSetChanged()
 
-            updateDbWithNewMovies()
+            if (movies.isEmpty()) {
+                onFailGettingDataFromServer()
+                return@Observer
+            }
+
+            onFreshMoviesReceived(movies)
         })
+    }
+
+    private fun onFailGettingDataFromServer() {
+        Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onFreshMoviesReceived(movies: List<MovieModel>) {
+        MoviesContent.movies.apply {
+            clear()
+            addAll(movies)
+        }
+        movies_rv_list.adapter?.notifyDataSetChanged()
+
+        updateDbWithNewMovies()
     }
 
     private fun loadMovies() {
@@ -89,10 +102,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         }
     }
 
-    private fun onFailGettingDataFromServer() {
-        main_progress.visibility = View.GONE
-        Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
-    }
 
     // OnMovieClickListener interface
     override fun onMovieClicked(itemPosition: Int) {
