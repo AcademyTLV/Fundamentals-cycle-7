@@ -1,4 +1,4 @@
 # Fundamentals-2019
 Ex 6 - Backgroun_Service
 
-https://github.com/AcademyTLV/Fundamentals-cycle-7/tree/ex-6-backgroun_service
+https://docs.google.com/presentation/d/1gJZOSrPzun91jyeln7CRNjC_-PHLOH4YYeDcaeWntQU/edit?usp=sharing
