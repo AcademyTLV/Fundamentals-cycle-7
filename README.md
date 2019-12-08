@@ -1,4 +1,6 @@
 # Fundamentals-2019
 Ex 5 - Threads
 
-https://docs.google.com/presentation/d/1SBpF7rJAuZhsaNIHzjJmyjAWMyvWZBZ51CcMIyAlNgw/edit?usp=sharing
+[Presentation][1]
+
+[1]: https://drive.google.com/open?id=1MN9dvvp1B4-u3D9cG6SU0gFfR2YLmHqJS4SemppdgHM
