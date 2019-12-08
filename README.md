@@ -1,4 +1,6 @@
 # Fundamentals-2019
 Ex 6 - Backgroun_Service
 
-https://docs.google.com/presentation/d/1gJZOSrPzun91jyeln7CRNjC_-PHLOH4YYeDcaeWntQU/edit?usp=sharing
+[Presentation][1]
+
+[1]: https://drive.google.com/open?id=1Yy8hhsh8c2JgehDBu3-VuvFHDmwmcqvVqKlCjUnCMSU
