@@ -1,4 +1,6 @@
 # Fundamentals-2019
 Ex 3 - Lists
 
-https://docs.google.com/presentation/d/1UESJbGja-IxBKNDOYdurU3sEjOWeSkkVYwXuiEMrwIM/edit?usp=sharing
+[Presentation][1]
+
+[1]: https://drive.google.com/open?id=1s_egHYDSBBVDi9sSvCxd2ReZ3uestTi8K4OB2JnMzWg
