@@ -1,4 +1,7 @@
 # Fundamentals-2019
 Ex 8 - Room
 
-https://docs.google.com/presentation/d/16V-KHJErkVsIoeGxYKr0xNLmKzwSsohTIi0VaiOraFU/edit?usp=sharing
+
+[Presentation][1]
+
+[1]: https://drive.google.com/open?id=16V-KHJErkVsIoeGxYKr0xNLmKzwSsohTIi0VaiOraFU
