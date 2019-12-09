@@ -8,14 +8,16 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.academy.R
 import com.android.academy.background_services.BGServiceActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.android.academy.R
 import com.android.academy.background_services.WorkerActivity
 import com.android.academy.db.AppDatabase
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.MoviesContent
+import com.android.academy.model.MoviesContent.movies
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
 import com.android.academy.threads.AsyncTaskActivity
@@ -27,24 +29,36 @@ import retrofit2.Response
 
 class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
+    private lateinit var moviesAdapter: MoviesViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
         loadMovies()
-        with(movies_rv_list) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@MoviesActivity)
-            adapter = MoviesViewAdapter(
-                MoviesContent.movies,
-                this@MoviesActivity,
-                this@MoviesActivity
-            )
-        }
+        initRecyclerView()
     }
 
-    override fun onMovieClicked(itemPosition: Int) {
-        if (itemPosition < 0 || itemPosition >= MoviesContent.movies.size) return
+    private fun initRecyclerView() {
+        moviesList.layoutManager = LinearLayoutManager(this@MoviesActivity) as RecyclerView.LayoutManager
 
+        // Create Movies Adapter
+        moviesAdapter = MoviesViewAdapter(
+            context = this@MoviesActivity,
+            movieClickListener = this@MoviesActivity
+        )
+
+        // Attach Adapter to RecyclerView
+        moviesList.adapter = moviesAdapter
+
+        moviesList.setHasFixedSize(true)
+        // Populate Adapter with data
+        moviesAdapter.setData(movies)
+    }
+
+    override fun onMovieClicked(movie: MovieModel, itemPosition: Int) {
+        Toast.makeText(this, movie.name, Toast.LENGTH_SHORT).show()
+
+        if (itemPosition < 0 || itemPosition >= movies.size) return
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, itemPosition)
         startActivity(intent)
@@ -84,7 +98,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
             R.id.action_delete -> {
                 AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
-                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
+                (moviesList.adapter as MoviesViewAdapter).clearData()
                 return true
             }
         }
@@ -102,8 +116,8 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     private fun getCachedMoviesFromDataBase() {
         val cachedMovies: List<MovieModel>? = AppDatabase.getInstance(this)?.movieDao()?.getAll()
         cachedMovies?.let {
-            MoviesContent.movies.addAll(cachedMovies)
-            movies_rv_list.adapter?.notifyDataSetChanged()
+            movies.addAll(cachedMovies)
+            moviesList.adapter?.notifyDataSetChanged()
         }
     }
 
@@ -119,7 +133,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
             ) {
                 onDataReceivedFromServer(response)
             }
-
         })
     }
 
@@ -127,11 +140,11 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         main_progress.visibility = View.GONE
         response.body()?.let {
             val convertedList = MovieModelConverter.convertNetworkMovieToModel(it)
-            MoviesContent.movies.apply {
+            movies.apply {
                 clear()
                 addAll(convertedList)
             }
-            movies_rv_list.adapter?.notifyDataSetChanged()
+            moviesList.adapter?.notifyDataSetChanged()
             AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.deleteAll()
             AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.insertAll(MoviesContent.movies)
         }
