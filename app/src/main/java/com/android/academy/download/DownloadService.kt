@@ -17,10 +17,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import com.android.academy.R
 
-
 class DownloadService : Service() {
 
     companion object {
+        const val TAG = "DownloadService"
 
         const val URL: String = "URL"
         const val ONGOING_NOTIFICATION_ID: Int = 14000605
@@ -40,10 +40,10 @@ class DownloadService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.d("TAG", "DownloadService # onStartCommand")
+        Log.d(TAG, "DownloadService # onStartCommand")
 
-        var url = intent.getStringExtra(URL)
-        Log.d("TAG", "DownloadService # URL: " + url)
+        val url = intent.getStringExtra(URL)
+        Log.d(TAG, "DownloadService # URL: " + url)
 
         url?.let {
             startDownloadThread(it)
@@ -54,18 +54,18 @@ class DownloadService : Service() {
     private fun startDownloadThread(url: String) {
         DownloadThread(url, object : DownloadThread.DownloadCallBack {
             override fun onProgressUpdate(progress: Int) {
-                Log.d("TAG", "DownloadService, DownloadThread, onProgressUpdate: $progress%")
+                Log.d(TAG, "DownloadService, DownloadThread, onProgressUpdate: $progress%")
                 updateNotification(progress)
             }
 
             override fun onDownloadFinished(filePath: String) {
-                Log.d("TAG", "DownloadService, DownloadThread, onDownloadFinished: $filePath")
+                Log.d(TAG, "DownloadService, DownloadThread, onDownloadFinished: $filePath")
                 sendBroadcastMsgDownloadComplete(filePath)
                 stopSelf()
             }
 
             override fun onError(error: String) {
-                Log.e("TAG", "DownloadService, DownloadThread, Error: $error")
+                Log.e(TAG, "DownloadService, DownloadThread, Error: $error")
                 stopSelf()
             }
         }).start()
@@ -127,8 +127,8 @@ class DownloadService : Service() {
     }
 
     override fun onDestroy() {
+        Log.d(TAG, "DownloadService # onDestroy")
         super.onDestroy()
-        Log.d("TAG", "DownloadService # onDestroy")
     }
 
     override fun onBind(intent: Intent): IBinder? {

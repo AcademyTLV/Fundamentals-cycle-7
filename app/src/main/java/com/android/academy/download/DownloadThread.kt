@@ -15,9 +15,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-/**
- * Created By Yamin on 12-10-2018
- */
 class DownloadThread(private val imageUrl: String, private val downloadCallBack: DownloadCallBack) :
     Thread() {
     private var progress = 0

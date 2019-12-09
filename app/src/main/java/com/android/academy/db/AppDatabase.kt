@@ -8,7 +8,7 @@ import com.android.academy.model.MovieModel
 import com.android.academy.model.TrailerModel
 
 
-@Database(entities = [MovieModel::class, TrailerModel::class], version = 1)
+@Database(entities = [MovieModel::class, TrailerModel::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao?

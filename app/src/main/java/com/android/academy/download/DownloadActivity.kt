@@ -19,10 +19,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.android.academy.R
 import com.android.academy.model.MovieModel
 
-
 class DownloadActivity : AppCompatActivity() {
 
     companion object {
+        const val TAG = "DownloadActivity"
 
         const val PERMISSION: String = Manifest.permission.WRITE_EXTERNAL_STORAGE
         const val PERMISSIONS_REQUEST_CODE: Int = 42
@@ -34,7 +34,6 @@ class DownloadActivity : AppCompatActivity() {
             intent.putExtra(ARG_MOVIE_MODEL, movieModel)
             context.startActivity(intent)
         }
-
     }
 
     private lateinit var broadcastReceiver: BroadcastReceiver
@@ -52,7 +51,7 @@ class DownloadActivity : AppCompatActivity() {
 
             override fun onReceive(context: Context, intent: Intent) {
                 val filePath = intent.getStringExtra(ARG_FILE_PATH)
-                Log.d("TAG", "DownloadActivity # onReceive, filePath: " + (filePath ?: return))
+                Log.d(TAG, "DownloadActivity # onReceive, filePath: " + (filePath ?: return))
                 if (!TextUtils.isEmpty(filePath)) {
                     showImage(filePath)
                 }
@@ -105,11 +104,11 @@ class DownloadActivity : AppCompatActivity() {
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // permission was granted, yay! Do the contacts-related task you need to do.
-                Log.d("TAG", "DownloadActivity # onRequestPermissionsResult, Permission granted")
+                Log.d(TAG, "DownloadActivity # onRequestPermissionsResult, Permission granted")
                 startDownloadService()
             } else {
                 // permission denied, boo! Disable the functionality that depends on this permission.
-                Log.d("TAG", "DownloadActivity # onRequestPermissionsResult, Permission denied")
+                Log.d(TAG, "DownloadActivity # onRequestPermissionsResult, Permission denied")
                 // no Permission - finish activity
                 finishActivity()
             }
@@ -140,13 +139,10 @@ class DownloadActivity : AppCompatActivity() {
 
     private fun startDownloadService() {
         val movieModel = intent.getParcelableExtra<MovieModel>(ARG_MOVIE_MODEL)
-        Log.d("TAG", "DownloadActivity # onCreate, movieModel: $movieModel")
+        Log.d(TAG, "DownloadActivity # onCreate, movieModel: $movieModel")
         movieModel?.let {
-            Log.d("TAG", "DownloadActivity # onRequestPermissionsResult, startDownloadService")
+            Log.d(TAG, "DownloadActivity # onRequestPermissionsResult, startDownloadService")
             DownloadService.startService(this, it.backImageUrl)
         }
-
     }
-
-
 }

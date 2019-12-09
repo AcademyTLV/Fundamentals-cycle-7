@@ -15,4 +15,6 @@
 	<color name="blue_600">#319BD7</color>
 	<color name="blue_800">#2377B9</color>
 
+	<color name="black_overlay">#66000000</color>
+
 </resources>
