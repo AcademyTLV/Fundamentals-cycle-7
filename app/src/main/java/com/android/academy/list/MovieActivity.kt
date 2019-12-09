@@ -17,6 +17,7 @@ import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.MoviesContent
+import com.android.academy.model.MoviesContent.movies
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
 import com.android.academy.threads.AsyncTaskActivity
@@ -115,8 +116,8 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     private fun getCachedMoviesFromDataBase() {
         val cachedMovies: List<MovieModel>? = AppDatabase.getInstance(this)?.movieDao()?.getAll()
         cachedMovies?.let {
-            MoviesContent.movies.addAll(cachedMovies)
-            movies_rv_list.adapter?.notifyDataSetChanged()
+            movies.addAll(cachedMovies)
+            moviesList.adapter?.notifyDataSetChanged()
         }
     }
 
@@ -139,7 +140,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         main_progress.visibility = View.GONE
         response.body()?.let {
             val convertedList = MovieModelConverter.convertNetworkMovieToModel(it)
-            MoviesContent.movies.apply {
+            movies.apply {
                 clear()
                 addAll(convertedList)
             }

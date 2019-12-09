@@ -26,7 +26,6 @@ private class MoviesDiffUtilCallback : DiffUtil.ItemCallback<MovieModel>() {
 }
 
 class MoviesViewAdapter(
-    private val movies: MutableList<MovieModel>,
     private val movieClickListener: OnMovieClickListener,
     context: Context
 ) : RecyclerView.Adapter<MoviesViewAdapter.ViewHolder>() {
@@ -78,7 +77,6 @@ class MoviesViewAdapter(
     }
 
     fun clearData() {
-        movies.clear()
-        notifyDataSetChanged()
+        setData(listOf())
     }
 }
