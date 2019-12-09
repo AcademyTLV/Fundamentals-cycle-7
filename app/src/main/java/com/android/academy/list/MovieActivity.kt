@@ -40,12 +40,13 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         moviesAdapter.setData(movies)
     }
 
-    override fun onMovieClicked(movie: MovieModel) {
+    override fun onMovieClicked(movie: MovieModel, itemPosition: Int) {
+        Toast.makeText(this, movie.name, Toast.LENGTH_SHORT).show()
+
         val intent = Intent(this, DetailsActivity::class.java)
-        intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, movie)
+        intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, itemPosition)
         startActivity(intent)
     }
-
 
     private fun loadMovies() {
         MoviesContent.addMovie(
