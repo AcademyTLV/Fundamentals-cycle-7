@@ -64,7 +64,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     private fun onFreshMoviesReceived(movies: List<MovieModel>) {
-        (moviesList.adapter as MoviesViewAdapter).updateData(movies)
+        moviesAdapter.setData(movies)
         moviesList.adapter?.notifyDataSetChanged()
 
         updateDbWithNewMovies(movies)
@@ -99,7 +99,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         when (item.itemId) {
             R.id.action_delete -> {
                 AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
-                (moviesList.adapter as MoviesViewAdapter).clearData()
+                moviesAdapter.setData(mutableListOf())
             }
         }
         return true
