@@ -12,23 +12,33 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     private val movies: MutableList<MovieModel> = mutableListOf()
 
+    private lateinit var moviesAdapter: MoviesViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
-
         loadMovies()
-        with(movies_rv_list) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@MoviesActivity)
-            adapter = MoviesViewAdapter(movies, this@MoviesActivity, this@MoviesActivity)
-        }
+        initRecyclerView()
     }
 
-    override fun onMovieClicked(itemPosition: Int) {
-        if (itemPosition < 0 || itemPosition >= movies.size) return
-        val movieModel = movies[itemPosition]
-        if (movieModel.name.isEmpty()) return
-        Toast.makeText(this, movieModel.name, Toast.LENGTH_SHORT).show()
+    private fun initRecyclerView() {
+        moviesList.layoutManager = LinearLayoutManager(this@MoviesActivity)
+
+        // Create Movies Adapter
+        moviesAdapter = MoviesViewAdapter(
+            context = this@MoviesActivity,
+            movieClickListener = this@MoviesActivity
+        )
+
+        // Attach Adapter to RecyclerView
+        moviesList.adapter = moviesAdapter
+
+        // Populate Adapter with data
+        moviesAdapter.setData(movies)
+    }
+
+    override fun onMovieClicked(movie: MovieModel) {
+        Toast.makeText(this, movie.name, Toast.LENGTH_SHORT).show()
     }
 
     private fun loadMovies() {

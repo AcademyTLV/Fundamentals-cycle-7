@@ -1,5 +1,7 @@
 package com.android.academy.list
 
+import com.android.academy.model.MovieModel
+
 interface OnMovieClickListener {
-    fun onMovieClicked(itemPosition: Int)
+    fun onMovieClicked(movie: MovieModel)
 }
