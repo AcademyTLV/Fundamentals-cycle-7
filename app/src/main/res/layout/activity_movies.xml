@@ -15,7 +15,7 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/movies_rv_list"
+        android:id="@+id/moviesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:visibility="gone"

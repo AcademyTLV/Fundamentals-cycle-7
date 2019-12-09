@@ -21,26 +21,30 @@ const val TAG = "MOVIESX"
 
 class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
+    private lateinit var moviesAdapter: MoviesViewAdapter
+
     private val moviesViewModel: MoviesViewModel
         get() = ViewModelProviders.of(this)[MoviesViewModel::class.java]
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
-        setRecyclerView()
+        initRecyclerView()
         getMovies()
     }
 
-    private fun setRecyclerView() {
-        movies_rv_list.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = MoviesViewAdapter(
-                mutableListOf(),
-                this@MoviesActivity,
-                context
-            )
-        }
+    private fun initRecyclerView() {
+        moviesList.layoutManager = LinearLayoutManager(this)
+
+        // Create Movies Adapter
+        moviesAdapter = MoviesViewAdapter(this, this)
+
+        // Attach Adapter to RecyclerView
+        moviesList.adapter = moviesAdapter
+
+        // Populate Adapter with data
+        //moviesAdapter.setData(movies)
+
     }
 
     private fun getMovies() {
@@ -60,8 +64,8 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     private fun onFreshMoviesReceived(movies: List<MovieModel>) {
-        (movies_rv_list.adapter as MoviesViewAdapter).updateData(movies)
-        movies_rv_list.adapter?.notifyDataSetChanged()
+        (moviesList.adapter as MoviesViewAdapter).updateData(movies)
+        moviesList.adapter?.notifyDataSetChanged()
 
         updateDbWithNewMovies(movies)
     }
@@ -75,8 +79,8 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     // OnMovieClickListener interface
-    override fun onMovieClicked(itemPosition: Int) {
-        startDetailsActivity(itemPosition)
+    override fun onMovieClicked(movie: MovieModel) {
+        Toast.makeText(this, movie.name, Toast.LENGTH_SHORT).show()
     }
 
     private fun startDetailsActivity(itemPosition: Int) {
@@ -87,7 +91,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     // Menu functions
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.movies_activity_menu, menu)
         return true
     }
 
@@ -95,7 +99,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         when (item.itemId) {
             R.id.action_delete -> {
                 AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
-                (movies_rv_list.adapter as MoviesViewAdapter).clearData()
+                (moviesList.adapter as MoviesViewAdapter).clearData()
             }
         }
         return true
