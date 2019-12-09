@@ -7,6 +7,13 @@
 	<string name="infinity_war_release_date">2018-04-25</string>
 	<string name="infinity_war_overview">As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.</string>
 	<string name="infinity_war_trailer">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="details_release_text">Released: </string>
+    <string name="details_trailer_text">Movie Trailer</string>
+    <string name="details_overview_text">Overview: </string>
 
 	<string name="title_activity_async_task">AsyncTaskActivity</string>
 
@@ -49,14 +56,6 @@
 	<string name="worker_constraint_network">Required Network</string>
 	<string name="worker_constraint_charging">Requires Charging</string>
 	<string name="worker_constraint_battery">Requires Battery Not Low</string>
-
-	<string name="title_activity_main">MainActivity</string>
-	<string name="action_settings">Settings</string>
-	<string name="section_format">Hello World from section: %1$d</string>
-
-	<string name="details_release_text">Released: </string>
-	<string name="details_trailer_text">Movie Trailer</string>
-	<string name="details_overview_text">Overview: </string>
 
     <string name="something_went_wrong">Something went wrong :\</string>
 	<string name="details_loading_trailer_text">Loading…</string>
