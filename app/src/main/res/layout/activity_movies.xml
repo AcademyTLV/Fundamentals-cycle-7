@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.recyclerview.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/moviesList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".list.MoviesActivity">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/movies_rv_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_movie" />
-</FrameLayout>
+    tools:context=".list.MoviesActivity"
+    tools:listitem="@layout/item_movie" />
