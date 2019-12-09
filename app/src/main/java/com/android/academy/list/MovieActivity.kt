@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.R
 import com.android.academy.model.MovieModel
 import kotlinx.android.synthetic.main.activity_movies.*
@@ -22,7 +23,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     private fun initRecyclerView() {
-        moviesList.layoutManager = LinearLayoutManager(this@MoviesActivity)
+        moviesList.layoutManager = LinearLayoutManager(this@MoviesActivity) as RecyclerView.LayoutManager
 
         // Create Movies Adapter
         moviesAdapter = MoviesViewAdapter(
