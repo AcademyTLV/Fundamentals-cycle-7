@@ -2,8 +2,10 @@ package com.android.academy.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.R
 import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
@@ -13,23 +15,34 @@ import kotlinx.android.synthetic.main.activity_movies.*
 
 class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
+    private lateinit var moviesAdapter: MoviesViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
-
         loadMovies()
-        with(movies_rv_list) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@MoviesActivity)
-            adapter = MoviesViewAdapter(movies, this@MoviesActivity, this@MoviesActivity)
-        }
+        initRecyclerView()
     }
 
-    override fun onMovieClicked(itemPosition: Int) {
-        if (itemPosition < 0 || itemPosition >= movies.size) return
+    private fun initRecyclerView() {
+        moviesList.layoutManager = LinearLayoutManager(this@MoviesActivity) as RecyclerView.LayoutManager
 
+        // Create Movies Adapter
+        moviesAdapter = MoviesViewAdapter(
+            context = this@MoviesActivity,
+            movieClickListener = this@MoviesActivity
+        )
+
+        // Attach Adapter to RecyclerView
+        moviesList.adapter = moviesAdapter
+
+        // Populate Adapter with data
+        moviesAdapter.setData(movies)
+    }
+
+    override fun onMovieClicked(movie: MovieModel) {
         val intent = Intent(this, DetailsActivity::class.java)
-        intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, itemPosition)
+        intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, movie)
         startActivity(intent)
     }
 
