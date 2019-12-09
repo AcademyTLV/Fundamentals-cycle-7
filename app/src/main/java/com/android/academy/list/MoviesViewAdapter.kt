@@ -17,13 +17,11 @@ import kotlinx.android.synthetic.main.item_movie.view.*
 private class MoviesDiffUtilCallback : DiffUtil.ItemCallback<MovieModel>() {
 
     override fun areItemsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
-        return oldItem.hashCode() == newItem.hashCode()
+        return oldItem.movieId == newItem.movieId
     }
 
     override fun areContentsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
-        return oldItem.imageRes == newItem.imageRes
-                && oldItem.name == newItem.name
-                && oldItem.overview == newItem.overview
+        return oldItem == newItem
     }
 }
 

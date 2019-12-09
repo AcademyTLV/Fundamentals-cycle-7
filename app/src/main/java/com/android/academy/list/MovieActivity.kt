@@ -2,7 +2,6 @@ package com.android.academy.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.telecom.Call
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -124,7 +123,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
                         clear()
                         addAll(convertedList)
                     }
-                    movies_rv_list.adapter?.notifyDataSetChanged()
+                    moviesList.adapter?.notifyDataSetChanged()
                 }
             }
 
