@@ -12,7 +12,6 @@ import com.android.academy.R
 import kotlinx.android.synthetic.main.activity_bgservice.*
 import java.util.*
 
-
 class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
@@ -39,7 +38,6 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
        //subscribeForProgressUpdates
         registerReceiver(backgroundProgressReceiver, IntentFilter(PROGRESS_UPDATE_ACTION))
     }
-
 
     public override fun onPause() {
         unregisterReceiver(backgroundProgressReceiver)
@@ -72,7 +70,6 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-
     inner class BackgroundProgressReceiver : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
@@ -96,7 +93,6 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
                     newToast.show()
                 }
             }
-
         }
     }
 
