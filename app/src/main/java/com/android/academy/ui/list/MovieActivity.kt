@@ -79,8 +79,9 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     // OnMovieClickListener interface
-    override fun onMovieClicked(movie: MovieModel) {
+    override fun onMovieClicked(movie: MovieModel, adapterPosition: Int) {
         Toast.makeText(this, movie.name, Toast.LENGTH_SHORT).show()
+        startDetailsActivity(adapterPosition)
     }
 
     private fun startDetailsActivity(itemPosition: Int) {
