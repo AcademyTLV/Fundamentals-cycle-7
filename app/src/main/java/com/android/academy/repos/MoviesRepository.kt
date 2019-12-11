@@ -15,7 +15,7 @@ import retrofit2.Response
 
 class MoviesRepository(private val appContext: Context) {
 
-    val mutableLiveData = MutableLiveData<List<MovieModel>>()
+    private val mutableLiveData = MutableLiveData<List<MovieModel>>()
 
     fun getMovies(): MutableLiveData<List<MovieModel>> {
         getMoviesFromDataBase()
@@ -27,9 +27,7 @@ class MoviesRepository(private val appContext: Context) {
         AppDatabase.getInstance(appContext)?.movieDao()?.getAll()?.observeForever {
             it?.let {
                 Log.d(TAG, "We got ${it.size} movies from DB")
-                if (it.isNotEmpty()) {
-                    mutableLiveData.value = it
-                }
+                mutableLiveData.value = it
             }
         }
     }
@@ -38,7 +36,7 @@ class MoviesRepository(private val appContext: Context) {
         RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult> {
             override fun onFailure(call: Call<MoviesListResult>, t: Throwable) {
                 Log.d(TAG, "On failure: ${t.message}")
-                // TODO Handle error
+                mutableLiveData.value = null
             }
 
             override fun onResponse(call: Call<MoviesListResult>, response: Response<MoviesListResult>) {

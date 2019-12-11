@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.R
-import com.android.academy.db.AppDatabase
 import com.android.academy.model.MovieModel
 import com.android.academy.ui.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_movies.*
@@ -30,6 +29,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
         initRecyclerView()
+        getState()
         getMovies()
     }
 
@@ -43,24 +43,24 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         moviesList.adapter = moviesAdapter
     }
 
-    private fun getMovies() {
-        Log.d(TAG, "getMovies called")
-        main_progress.visibility = View.VISIBLE
+    private fun getState() {
+        moviesViewModel.getState().observe(this, Observer {
+            if (it == null) return@Observer
 
-        moviesViewModel.getMovies().observe(this, Observer<List<MovieModel>> { movies ->
-            main_progress.visibility = View.GONE
-
-            if (movies.isEmpty()) {
-                Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
-                return@Observer
+            Log.d(TAG, "State: ${it.name}")
+            when(it) {
+                State.LOADING -> mainProgress.visibility = View.VISIBLE
+                State.LOADED -> mainProgress.visibility = View.GONE
+                State.ERROR ->   Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
             }
-
-            onFreshMoviesReceived(movies)
         })
     }
 
-    private fun onFreshMoviesReceived(movies: List<MovieModel>) {
-        moviesAdapter.setData(movies)
+    private fun getMovies() {
+        Log.d(TAG, "getMovies called")
+        moviesViewModel.getMovies().observe(this, Observer<List<MovieModel>> {
+            moviesAdapter.setData(it)
+        })
     }
 
     // OnMovieClickListener interface

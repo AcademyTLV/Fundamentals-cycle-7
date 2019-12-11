@@ -6,7 +6,7 @@
     tools:context=".ui.list.MoviesActivity">
 
     <ProgressBar
-        android:id="@+id/main_progress"
+        android:id="@+id/mainProgress"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:visibility="gone"
