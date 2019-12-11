@@ -61,8 +61,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     private fun onFreshMoviesReceived(movies: List<MovieModel>) {
         moviesAdapter.setData(movies)
-        // TODO Do we need it?
-        moviesAdapter.notifyDataSetChanged()
     }
 
     // OnMovieClickListener interface
@@ -85,10 +83,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_delete -> {
-                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
-                moviesAdapter.setData(mutableListOf())
-            }
+            R.id.action_delete -> moviesViewModel.clearMoviesFromDb()
         }
         return true
     }

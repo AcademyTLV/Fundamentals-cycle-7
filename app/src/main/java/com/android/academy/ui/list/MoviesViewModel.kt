@@ -26,4 +26,8 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
             it?.let { movies.postValue(it) }
         }
     }
+
+    fun clearMoviesFromDb() {
+        moviesRepository.clearMoviesFromDb()
+    }
 }

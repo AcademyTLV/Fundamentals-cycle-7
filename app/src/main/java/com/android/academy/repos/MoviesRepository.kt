@@ -38,7 +38,7 @@ class MoviesRepository(private val appContext: Context) {
         RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult> {
             override fun onFailure(call: Call<MoviesListResult>, t: Throwable) {
                 Log.d(TAG, "On failure: ${t.message}")
-                mutableLiveData.value = listOf()
+                // TODO Handle error
             }
 
             override fun onResponse(call: Call<MoviesListResult>, response: Response<MoviesListResult>) {
@@ -57,5 +57,10 @@ class MoviesRepository(private val appContext: Context) {
             movieDao()?.deleteAll()
             movieDao()?.insertAll(movies)
         }
+    }
+
+    fun clearMoviesFromDb() {
+        Log.d(TAG, "clearMoviesFromDb")
+        AppDatabase.getInstance(appContext)?.movieDao()?.deleteAll()
     }
 }
