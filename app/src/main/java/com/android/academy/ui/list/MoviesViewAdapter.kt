@@ -65,7 +65,7 @@ class MoviesViewAdapter(
 
         init {
             view.setOnClickListener {
-                movieClickListener.onMovieClicked(movieModel, adapterPosition)
+                movieClickListener.onMovieClicked(adapterPosition)
             }
         }
 

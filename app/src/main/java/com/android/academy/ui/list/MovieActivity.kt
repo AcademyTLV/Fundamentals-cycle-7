@@ -64,7 +64,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     // OnMovieClickListener interface
-    override fun onMovieClicked(movie: MovieModel, adapterPosition: Int) {
+    override fun onMovieClicked(adapterPosition: Int) {
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, adapterPosition)
         startActivity(intent)
