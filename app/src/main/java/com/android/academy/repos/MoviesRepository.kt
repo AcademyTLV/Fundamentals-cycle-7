@@ -23,6 +23,11 @@ class MoviesRepository(private val appContext: Context) {
         return mutableLiveData
     }
 
+    fun getMoviesFromDb(): MutableLiveData<List<MovieModel>> {
+        getMoviesFromDataBase()
+        return mutableLiveData
+    }
+
     private fun getMoviesFromDataBase() {
         AppDatabase.getInstance(appContext)?.movieDao()?.getAll()?.observeForever {
             it?.let {

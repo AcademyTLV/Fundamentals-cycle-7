@@ -48,10 +48,10 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
             if (it == null) return@Observer
 
             Log.d(TAG, "State: ${it.name}")
-            when(it) {
+            when (it) {
                 State.LOADING -> mainProgress.visibility = View.VISIBLE
                 State.LOADED -> mainProgress.visibility = View.GONE
-                State.ERROR ->   Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+                State.ERROR -> Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -65,13 +65,8 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     // OnMovieClickListener interface
     override fun onMovieClicked(movie: MovieModel, adapterPosition: Int) {
-        Toast.makeText(this, movie.name, Toast.LENGTH_SHORT).show()
-        startDetailsActivity(adapterPosition)
-    }
-
-    private fun startDetailsActivity(itemPosition: Int) {
         val intent = Intent(this, DetailsActivity::class.java)
-        intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, itemPosition)
+        intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, adapterPosition)
         startActivity(intent)
     }
 
