@@ -41,10 +41,6 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
         // Attach Adapter to RecyclerView
         moviesList.adapter = moviesAdapter
-
-        // Populate Adapter with data
-        //moviesAdapter.setData(movies)
-
     }
 
     private fun getMovies() {
@@ -65,17 +61,8 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     private fun onFreshMoviesReceived(movies: List<MovieModel>) {
         moviesAdapter.setData(movies)
-        moviesList.adapter?.notifyDataSetChanged()
-
-        updateDbWithNewMovies(movies)
-    }
-
-    private fun updateDbWithNewMovies(movies: List<MovieModel>) {
-        AppDatabase.getInstance(this)?.apply {
-            movieDao()?.deleteAll()
-            movieDao()?.insertAll(movies)
-            Log.d(TAG, "DB Updated with fresh movies")
-        }
+        // TODO Do we need it?
+        moviesAdapter.notifyDataSetChanged()
     }
 
     // OnMovieClickListener interface

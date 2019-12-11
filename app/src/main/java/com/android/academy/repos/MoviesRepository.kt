@@ -24,11 +24,12 @@ class MoviesRepository(private val appContext: Context) {
     }
 
     private fun getMoviesFromDataBase() {
-        val cachedMovies: List<MovieModel>? = AppDatabase.getInstance(appContext)?.movieDao()?.getAll()
-        cachedMovies?.let {
-            Log.d(TAG, "We got cached ${it.size} movies")
-            if ( it.isNotEmpty()) {
-                mutableLiveData.value = it
+        AppDatabase.getInstance(appContext)?.movieDao()?.getAll()?.observeForever {
+            it?.let {
+                Log.d(TAG, "We got ${it.size} movies from DB")
+                if (it.isNotEmpty()) {
+                    mutableLiveData.value = it
+                }
             }
         }
     }
@@ -36,6 +37,7 @@ class MoviesRepository(private val appContext: Context) {
     private fun getMoviesFromServer() {
         RestClient.moviesService.loadPopularMovies().enqueue(object : Callback<MoviesListResult> {
             override fun onFailure(call: Call<MoviesListResult>, t: Throwable) {
+                Log.d(TAG, "On failure: ${t.message}")
                 mutableLiveData.value = listOf()
             }
 
@@ -43,9 +45,17 @@ class MoviesRepository(private val appContext: Context) {
                 Log.d(TAG, "On response from server called")
                 response.body()?.let {
                     Log.d(TAG, "We got fresh ${response.body()!!.results.size} movies")
-                    mutableLiveData.value = MovieModelConverter.convertNetworkMovieToModel(it)
+                    updateDbWithNewMovies(MovieModelConverter.convertNetworkMovieToModel(it))
                 }
             }
         })
+    }
+
+    private fun updateDbWithNewMovies(movies: List<MovieModel>) {
+        Log.d(TAG, "Update DB with fresh movies")
+        AppDatabase.getInstance(appContext)?.apply {
+            movieDao()?.deleteAll()
+            movieDao()?.insertAll(movies)
+        }
     }
 }
