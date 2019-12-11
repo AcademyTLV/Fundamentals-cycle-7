@@ -30,14 +30,15 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun loadMovies() {
         moviesRepository.getMovies().observeForever {
-            if (it != null) {
-                if (it.isNotEmpty()) {
-                    state.postValue(State.LOADED)
-                }
-                movies.postValue(it)
-            } else {
+            if (it == null) {
                 state.postValue(State.ERROR)
+                return@observeForever
             }
+
+            if (it.isNotEmpty()) {
+                state.postValue(State.LOADED)
+            }
+            movies.postValue(it)
         }
     }
 
