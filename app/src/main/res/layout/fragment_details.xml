@@ -20,7 +20,7 @@
             android:src="@drawable/infinity_war_background" />
 
         <ImageButton
-            android:id="@+id/details_ib_download"
+            android:id="@+id/btnDownload"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
@@ -87,7 +87,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/details_btn_trailer"
+                android:id="@+id/btnDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"

@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_movies.*
 
 const val TAG = "MOVIESX"
 
-class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
+class MoviesActivity : AppCompatActivity() {
 
     private lateinit var moviesAdapter: MoviesViewAdapter
 
@@ -29,21 +29,22 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
         initRecyclerView()
-        getState()
-        getMovies()
+        observeState()
+        observeMovies()
+        observerOpenDetails()
     }
 
     private fun initRecyclerView() {
         moviesList.layoutManager = LinearLayoutManager(this)
 
         // Create Movies Adapter
-        moviesAdapter = MoviesViewAdapter(this, this)
+        moviesAdapter = MoviesViewAdapter(moviesViewModel, this)
 
         // Attach Adapter to RecyclerView
         moviesList.adapter = moviesAdapter
     }
 
-    private fun getState() {
+    private fun observeState() {
         moviesViewModel.getState().observe(this, Observer {
             if (it == null) return@Observer
 
@@ -59,18 +60,19 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         })
     }
 
-    private fun getMovies() {
+    private fun observeMovies() {
         Log.d(TAG, "getMovies called")
-        moviesViewModel.getMovies().observe(this, Observer<List<MovieModel>> {
+        moviesViewModel.getMovies().observe(this, Observer {
             moviesAdapter.setData(it)
         })
     }
 
-    // OnMovieClickListener interface
-    override fun onMovieClicked(adapterPosition: Int) {
-        val intent = Intent(this, DetailsActivity::class.java)
-        intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, adapterPosition)
-        startActivity(intent)
+    private fun observerOpenDetails() {
+        moviesViewModel.getOpenDetails().observe(this, Observer {
+            val intent = Intent(this, DetailsActivity::class.java)
+            intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, it)
+            startActivity(intent)
+        })
     }
 
     // Menu functions

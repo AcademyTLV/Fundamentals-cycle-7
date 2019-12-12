@@ -28,7 +28,7 @@ private class MoviesDiffUtilCallback : DiffUtil.ItemCallback<MovieModel>() {
 }
 
 class MoviesViewAdapter(
-    private val movieClickListener: OnMovieClickListener,
+    private val moviesViewModel: MoviesViewModel,
     context: Context
 ) : RecyclerView.Adapter<MoviesViewAdapter.ViewHolder>() {
 
@@ -43,7 +43,7 @@ class MoviesViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = layoutInflater.inflate(R.layout.item_movie, parent, false)
-        return ViewHolder(view, movieClickListener)
+        return ViewHolder(view, moviesViewModel)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -55,7 +55,7 @@ class MoviesViewAdapter(
         asyncListDiffer.submitList(newItems)
     }
 
-    inner class ViewHolder(view: View, movieClickListener: OnMovieClickListener) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View, moviesViewModel: MoviesViewModel) : RecyclerView.ViewHolder(view) {
 
         private val ivImage: ImageView = view.item_movie_iv
         private val tvTitle: TextView = view.item_movie_tv_title
@@ -65,7 +65,7 @@ class MoviesViewAdapter(
 
         init {
             view.setOnClickListener {
-                movieClickListener.onMovieClicked(adapterPosition)
+                moviesViewModel.onMovieClicked(adapterPosition)
             }
         }
 

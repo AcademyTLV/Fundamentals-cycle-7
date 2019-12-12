@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.android.academy.R
 import com.android.academy.db.AppDatabase
 import com.android.academy.download.DownloadActivity
@@ -31,6 +32,11 @@ import retrofit2.Response
 class MovieDetailsFragment : Fragment(), View.OnClickListener {
     private var movieModel: MovieModel? = null
     private val picasso = Picasso.get()
+
+    private val detailsViewModel: DetailsViewModel
+        get() = activity?.run {
+            ViewModelProviders.of(this)[DetailsViewModel::class.java]
+        } ?: throw Exception("Invalid Activity")
 
     companion object {
 
@@ -64,8 +70,8 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setClickListeners() {
-        details_btn_trailer.setOnClickListener(this)
-        details_ib_download.setOnClickListener(this)
+        btnDetails.setOnClickListener(this)
+        btnDownload.setOnClickListener(this)
     }
 
     private fun setMovie() {
@@ -81,13 +87,11 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View) {
         movieModel?.let {
             when (view.id) {
-                details_btn_trailer.id -> {
+                btnDetails.id -> {
                     setButtonLoadingStatus()
                     getMovieTrailers(it)
                 }
-                details_ib_download.id -> {
-                    downloadImage()
-                }
+                btnDownload.id -> downloadImage()
             }
         }
     }
@@ -152,8 +156,8 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
         anim.duration = 1000
         anim.repeatCount = ValueAnimator.INFINITE
         anim.start()
-        details_btn_trailer.setText(R.string.details_loading_trailer_text)
-        details_btn_trailer.setCompoundDrawablesWithIntrinsicBounds(
+        btnDetails.setText(R.string.details_loading_trailer_text)
+        btnDetails.setCompoundDrawablesWithIntrinsicBounds(
             rotateDrawable,
             null,
             null,
@@ -162,8 +166,8 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun resetButtonStatus() {
-        details_btn_trailer.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-        details_btn_trailer.setText(R.string.details_trailer_text)
+        btnDetails.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+        btnDetails.setText(R.string.details_trailer_text)
     }
 
     private fun downloadImage() {
