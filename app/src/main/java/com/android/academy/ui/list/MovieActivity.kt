@@ -51,7 +51,10 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
             when (it) {
                 State.LOADING -> mainProgress.visibility = View.VISIBLE
                 State.LOADED -> mainProgress.visibility = View.GONE
-                State.ERROR -> Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+                State.ERROR -> {
+                    mainProgress.visibility = View.GONE
+                    Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
