@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.android.academy.download.DownloadActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.repos.MoviesRepository
 
@@ -11,6 +12,7 @@ class DetailsViewModel(application: Application) : AndroidViewModel(application)
 
     private val moviesRepository = MoviesRepository(application)
 
+    // Get Movies
     private val movies: MutableLiveData<List<MovieModel>> by lazy {
         MutableLiveData<List<MovieModel>>().also {
             getMoviesFromDb()
@@ -25,4 +27,12 @@ class DetailsViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    // Download Image
+    private val downloadImage: MutableLiveData<MovieModel> by lazy { MutableLiveData<MovieModel>() }
+
+    fun getDownloadImage(): LiveData<MovieModel> = downloadImage
+
+    fun downloadImageClicked(movieModel: MovieModel) {
+        downloadImage.postValue(movieModel)
+    }
 }

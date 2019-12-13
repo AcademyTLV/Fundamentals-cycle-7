@@ -32,11 +32,7 @@ import retrofit2.Response
 class MovieDetailsFragment : Fragment(), View.OnClickListener {
     private var movieModel: MovieModel? = null
     private val picasso = Picasso.get()
-
-    private val detailsViewModel: DetailsViewModel
-        get() = activity?.run {
-            ViewModelProviders.of(this)[DetailsViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
+    private lateinit var detailsViewModel: DetailsViewModel
 
     companion object {
 
@@ -54,6 +50,10 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        detailsViewModel = activity?.run {
+            ViewModelProviders.of(this)[DetailsViewModel::class.java]
+        } ?: throw Exception("Invalid Activity")
+
         movieModel = arguments?.getParcelable(ARG_MOVIE)
         Log.d(TAG, "movieModel: " + movieModel!!)
     }
@@ -64,7 +64,6 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setClickListeners()
         setMovie()
     }
@@ -171,11 +170,6 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun downloadImage() {
-        val context = context
-        if (movieModel == null || context == null) return
-        movieModel?.let {
-            DownloadActivity.startActivity(context, it)
-        }
-
+        movieModel?.let { detailsViewModel.downloadImageClicked(it) }
     }
 }
