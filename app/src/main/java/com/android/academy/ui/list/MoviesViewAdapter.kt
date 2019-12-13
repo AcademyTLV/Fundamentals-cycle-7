@@ -61,8 +61,6 @@ class MoviesViewAdapter(
         private val tvTitle: TextView = view.item_movie_tv_title
         private val tvOverview: TextView = view.item_movie_tv_overview
 
-        private lateinit var movieModel: MovieModel
-
         init {
             view.setOnClickListener {
                 moviesViewModel.onMovieClicked(adapterPosition)
@@ -73,8 +71,6 @@ class MoviesViewAdapter(
             picasso.load(movieModel.imageUrl).into(ivImage)
             tvTitle.text = movieModel.name
             tvOverview.text = movieModel.overview
-
-            this.movieModel = movieModel
         }
     }
 }
