@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.android.academy.model.MovieModel
+import com.android.academy.ui.details.fragment.DetailsFragment
 
 class SectionsPagerAdapter(
     fm: FragmentManager, private val movies: List<MovieModel>
@@ -12,6 +13,6 @@ class SectionsPagerAdapter(
     override fun getCount() = movies.size
 
     override fun getItem(position: Int): Fragment {
-        return MovieDetailsFragment.newInstance(movies[position])
+        return DetailsFragment.newInstance(movies[position])
     }
 }

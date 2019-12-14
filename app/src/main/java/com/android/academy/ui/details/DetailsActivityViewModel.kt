@@ -8,7 +8,7 @@ import com.android.academy.download.DownloadActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.repos.MoviesRepository
 
-class DetailsViewModel(application: Application) : AndroidViewModel(application) {
+class DetailsActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val moviesRepository = MoviesRepository(application)
 

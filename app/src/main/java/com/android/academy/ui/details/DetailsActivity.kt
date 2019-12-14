@@ -1,6 +1,5 @@
 package com.android.academy.ui.details
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -16,8 +15,8 @@ class DetailsActivity : AppCompatActivity() {
         const val EXTRA_ITEM_POSITION = "init-position-data"
     }
 
-    private val detailsViewModel: DetailsViewModel
-        get() = ViewModelProviders.of(this)[DetailsViewModel::class.java]
+    private val viewModel: DetailsActivityViewModel
+        get() = ViewModelProviders.of(this)[DetailsActivityViewModel::class.java]
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,13 +27,13 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun observeMovies() {
-        detailsViewModel.getMovies().observe(this, Observer {
+        viewModel.getMovies().observe(this, Observer {
             it?.let { setSectionsPagerAdapter(it) }
         })
     }
 
     private fun observerDownloadImage() {
-        detailsViewModel.getDownloadImage().observe(this, Observer {
+        viewModel.getDownloadImage().observe(this, Observer {
             DownloadActivity.startActivity(this, it)
         })
     }

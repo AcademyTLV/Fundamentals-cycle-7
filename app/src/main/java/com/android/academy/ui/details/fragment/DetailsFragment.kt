@@ -1,4 +1,4 @@
-package com.android.academy.ui.details
+package com.android.academy.ui.details.fragment
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -16,31 +16,31 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.android.academy.R
 import com.android.academy.db.AppDatabase
-import com.android.academy.download.DownloadActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.TrailerModel
 import com.android.academy.networking.NetworkingConstants.YOUTUBE_BASE_URL
 import com.android.academy.networking.RestClient
 import com.android.academy.networking.TrailersListResult
+import com.android.academy.ui.details.DetailsActivityViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MovieDetailsFragment : Fragment(), View.OnClickListener {
+class DetailsFragment : Fragment(), View.OnClickListener {
     private var movieModel: MovieModel? = null
     private val picasso = Picasso.get()
-    private lateinit var detailsViewModel: DetailsViewModel
+    private lateinit var detailsActivityViewModel: DetailsActivityViewModel
 
     companion object {
 
         private val TAG = "MovieDetailsFragment"
         private val ARG_MOVIE = "MovieModel-data"
 
-        fun newInstance(movieModel: MovieModel): MovieDetailsFragment {
-            val fragment = MovieDetailsFragment()
+        fun newInstance(movieModel: MovieModel): DetailsFragment {
+            val fragment = DetailsFragment()
             val args = Bundle()
             args.putParcelable(ARG_MOVIE, movieModel)
             fragment.arguments = args
@@ -50,8 +50,8 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        detailsViewModel = activity?.run {
-            ViewModelProviders.of(this)[DetailsViewModel::class.java]
+        detailsActivityViewModel = activity?.run {
+            ViewModelProviders.of(this)[DetailsActivityViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
         movieModel = arguments?.getParcelable(ARG_MOVIE)
@@ -170,6 +170,6 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun downloadImage() {
-        movieModel?.let { detailsViewModel.downloadImageClicked(it) }
+        movieModel?.let { detailsActivityViewModel.downloadImageClicked(it) }
     }
 }
