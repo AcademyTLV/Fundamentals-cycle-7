@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.R
 import com.android.academy.model.MovieModel
 import com.squareup.picasso.Picasso
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 private class MoviesDiffUtilCallback : DiffUtil.ItemCallback<MovieModel>() {

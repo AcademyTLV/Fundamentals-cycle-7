@@ -2,7 +2,6 @@ package com.android.academy.ui.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,11 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.academy.R
-import com.android.academy.model.MovieModel
 import com.android.academy.ui.details.DetailsActivity
+import com.android.academy.utils.logD
 import kotlinx.android.synthetic.main.activity_movies.*
-
-const val TAG = "MOVIESX"
 
 class MoviesActivity : AppCompatActivity() {
 
@@ -48,7 +45,7 @@ class MoviesActivity : AppCompatActivity() {
         moviesViewModel.getState().observe(this, Observer {
             if (it == null) return@Observer
 
-            Log.d(TAG, "State: ${it.name}")
+            logD("State: ${it.name}")
             when (it) {
                 State.LOADING -> mainProgress.visibility = View.VISIBLE
                 State.LOADED -> mainProgress.visibility = View.GONE
@@ -61,7 +58,7 @@ class MoviesActivity : AppCompatActivity() {
     }
 
     private fun observeMovies() {
-        Log.d(TAG, "getMovies called")
+        logD("getMovies called")
         moviesViewModel.getMovies().observe(this, Observer {
             moviesAdapter.setData(it)
         })
@@ -69,7 +66,7 @@ class MoviesActivity : AppCompatActivity() {
 
     private fun observerOpenDetails() {
         moviesViewModel.getOpenDetails().observe(this, Observer {
-            Log.d(TAG, "open details called")
+            logD("open details called")
             val intent = Intent(this, DetailsActivity::class.java)
             intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, it)
             startActivity(intent)

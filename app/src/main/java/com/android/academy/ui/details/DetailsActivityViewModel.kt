@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.android.academy.download.DownloadActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.repos.MoviesRepository
 

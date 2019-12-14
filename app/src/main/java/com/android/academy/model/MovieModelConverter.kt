@@ -6,7 +6,7 @@ import com.android.academy.networking.TrailerResult
 import com.android.academy.networking.TrailersListResult
 
 object MovieModelConverter {
-    fun convertNetworkMovieToModel(model : MoviesListResult) : List<MovieModel> {
+    fun convertNetworkMovieToModel(model: MoviesListResult): List<MovieModel> {
         return model.results.map {
             MovieModel(
                 movieId = it.id,

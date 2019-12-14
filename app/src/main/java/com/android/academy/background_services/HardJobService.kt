@@ -2,16 +2,9 @@ package com.android.academy.background_services
 
 import android.app.Service
 import android.content.Intent
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.IBinder
-import android.os.Looper
-import android.os.Message
-import android.os.Process
-import android.os.SystemClock
-import android.util.Log
-
+import android.os.*
 import com.android.academy.R
+import com.android.academy.utils.logD
 
 open class HardJobService : Service() {
 
@@ -68,7 +61,7 @@ open class HardJobService : Service() {
                 val intent =
                     Intent(BGServiceActivity.PROGRESS_UPDATE_ACTION)
                 intent.putExtra(BGServiceActivity.PROGRESS_VALUE_KEY, i)
-                Log.d(TAG, "progress: $i")
+                logD("progress: $i")
                 sendBroadcast(intent)
                 i++
             }

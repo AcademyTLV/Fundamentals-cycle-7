@@ -1,27 +1,19 @@
 package com.android.academy.download
 
-import android.app.Activity
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.IBinder
-
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-
 import com.android.academy.R
+import com.android.academy.utils.logD
+import com.android.academy.utils.logE
 
 class DownloadService : Service() {
 
     companion object {
-        const val TAG = "DownloadService"
-
         const val URL: String = "URL"
         const val ONGOING_NOTIFICATION_ID: Int = 14000605
         private const val CHANNEL_DEFAULT_IMPORTANCE = "Channel"
@@ -40,10 +32,10 @@ class DownloadService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.d(TAG, "DownloadService # onStartCommand")
+        logD("DownloadService # onStartCommand")
 
         val url = intent.getStringExtra(URL)
-        Log.d(TAG, "DownloadService # URL: " + url)
+        logD("DownloadService # URL: $url")
 
         url?.let {
             startDownloadThread(it)
@@ -54,18 +46,18 @@ class DownloadService : Service() {
     private fun startDownloadThread(url: String) {
         DownloadThread(url, object : DownloadThread.DownloadCallBack {
             override fun onProgressUpdate(progress: Int) {
-                Log.d(TAG, "DownloadService, DownloadThread, onProgressUpdate: $progress%")
+                logD("DownloadService, DownloadThread, onProgressUpdate: $progress%")
                 updateNotification(progress)
             }
 
             override fun onDownloadFinished(filePath: String) {
-                Log.d(TAG, "DownloadService, DownloadThread, onDownloadFinished: $filePath")
+                logD("DownloadService, DownloadThread, onDownloadFinished: $filePath")
                 sendBroadcastMsgDownloadComplete(filePath)
                 stopSelf()
             }
 
             override fun onError(error: String) {
-                Log.e(TAG, "DownloadService, DownloadThread, Error: $error")
+                logE("DownloadService, DownloadThread, Error: $error")
                 stopSelf()
             }
         }).start()
@@ -127,7 +119,7 @@ class DownloadService : Service() {
     }
 
     override fun onDestroy() {
-        Log.d(TAG, "DownloadService # onDestroy")
+        logD("DownloadService # onDestroy")
         super.onDestroy()
     }
 

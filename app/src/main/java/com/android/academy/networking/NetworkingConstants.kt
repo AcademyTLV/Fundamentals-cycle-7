@@ -1,6 +1,6 @@
 package com.android.academy.networking
 
-object NetworkingConstants  {
+object NetworkingConstants {
     const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
     const val BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/w780"
     const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="

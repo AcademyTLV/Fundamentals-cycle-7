@@ -20,7 +20,7 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
         const val SERVICE_STATUS: String = "SERVICE_STATUS"
     }
 
-    private  val backgroundProgressReceiver = BackgroundProgressReceiver()
+    private val backgroundProgressReceiver = BackgroundProgressReceiver()
     internal var isServiceStarted: Boolean = false
     internal var isIntentServiceStarted: Boolean = false
     internal var toast: Toast? = null
@@ -35,7 +35,7 @@ class BGServiceActivity : AppCompatActivity(), View.OnClickListener {
 
     public override fun onResume() {
         super.onResume()
-       //subscribeForProgressUpdates
+        //subscribeForProgressUpdates
         registerReceiver(backgroundProgressReceiver, IntentFilter(PROGRESS_UPDATE_ACTION))
     }
 

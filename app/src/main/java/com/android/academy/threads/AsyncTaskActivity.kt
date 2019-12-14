@@ -46,7 +46,7 @@ class AsyncTaskActivity : AppCompatActivity(), IAsyncTaskEvents {
     }
 
     override fun startAsyncTask() {
-        if (asyncTask == null || asyncTask !!.isCancelled) {
+        if (asyncTask == null || asyncTask!!.isCancelled) {
             Toast.makeText(this, R.string.msg_should_create_task, Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, getString(R.string.msg_onstart), Toast.LENGTH_SHORT).show()

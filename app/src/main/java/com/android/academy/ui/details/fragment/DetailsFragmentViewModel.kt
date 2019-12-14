@@ -1,13 +1,12 @@
 package com.android.academy.ui.details.fragment
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.academy.model.MovieModel
 import com.android.academy.repos.TrailersRepository
-import com.android.academy.ui.list.TAG
+import com.android.academy.utils.logD
 
 
 enum class State { LOADING, LOADED, ERROR }
@@ -15,7 +14,7 @@ enum class State { LOADING, LOADED, ERROR }
 class DetailsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
-        Log.d(TAG, "DetailsFragmentViewModel instance created: $this")
+        logD("DetailsFragmentViewModel instance created: $this")
     }
 
     private val trailersRepository = TrailersRepository(application)
@@ -52,6 +51,6 @@ class DetailsFragmentViewModel(application: Application) : AndroidViewModel(appl
 
     override fun onCleared() {
         super.onCleared()
-        Log.d(TAG, "DetailsFragmentViewModel onCleared called for: $this")
+        logD("DetailsFragmentViewModel onCleared called for: $this")
     }
 }

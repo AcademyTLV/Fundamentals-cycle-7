@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.drawable.RotateDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,7 @@ import com.android.academy.R
 import com.android.academy.model.MovieModel
 import com.android.academy.networking.NetworkingConstants.YOUTUBE_BASE_URL
 import com.android.academy.ui.details.DetailsActivityViewModel
+import com.android.academy.utils.logD
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 
@@ -30,7 +30,6 @@ class DetailsFragment : Fragment(), View.OnClickListener {
 
     companion object {
 
-        private val TAG = "MOVIESX"
         private val ARG_MOVIE = "MovieModel-data"
 
         fun newInstance(movieModel: MovieModel): DetailsFragment {
@@ -49,7 +48,7 @@ class DetailsFragment : Fragment(), View.OnClickListener {
         observerOpenTrailer()
 
         movieModel = arguments?.getParcelable(ARG_MOVIE)
-        Log.d(TAG, "movieModel: " + movieModel!!)
+        logD("movieModel: " + movieModel!!)
     }
 
     private fun getViewModels() {
@@ -89,7 +88,7 @@ class DetailsFragment : Fragment(), View.OnClickListener {
         fragmentViewModel.getState().observe(this, Observer {
             if (it == null) return@Observer
 
-            Log.d(TAG, "State: ${it.name}")
+            logD("State: ${it.name}")
 
             when (it) {
                 State.LOADING -> setButtonLoadingStatus()
@@ -101,7 +100,7 @@ class DetailsFragment : Fragment(), View.OnClickListener {
 
     private fun observerOpenTrailer() {
         fragmentViewModel.getOpenTrailer().observe(this, Observer {
-            Log.d(TAG, "open trailer called in fragment $this")
+            logD("open trailer called in fragment $this")
             val trailerUrl = "${YOUTUBE_BASE_URL}$it"
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
             startActivity(browserIntent)

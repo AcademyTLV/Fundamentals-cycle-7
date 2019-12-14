@@ -28,7 +28,7 @@ open class HardJobIntentService : IntentService(TAG) {
         showToast(getString(R.string.finishing_intent_service_msg))
     }
 
-    protected fun showToast(msg: String) {
+    private fun showToast(msg: String) {
         val intent = Intent(BGServiceActivity.PROGRESS_UPDATE_ACTION)
         intent.putExtra(BGServiceActivity.SERVICE_STATUS, msg)
         sendBroadcast(intent)

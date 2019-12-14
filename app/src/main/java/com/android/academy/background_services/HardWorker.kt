@@ -3,17 +3,13 @@ package com.android.academy.background_services
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.android.academy.R
+import com.android.academy.utils.logD
 
 class HardWorker(context: Context, workerParams: WorkerParameters) :
     Worker(context.applicationContext, workerParams) {
-
-    companion object {
-        private const val TAG = "HardWorker"
-    }
 
     private var isWorkerStopped: Boolean = false
 
@@ -25,7 +21,7 @@ class HardWorker(context: Context, workerParams: WorkerParameters) :
             SystemClock.sleep(100)
             val broadcastIntent = Intent(WorkerActivity.PROGRESS_UPDATE_ACTION)
             broadcastIntent.putExtra(WorkerActivity.PROGRESS_VALUE_KEY, i)
-            Log.d(TAG, "progress: $i")
+            logD("progress: $i")
             applicationContext.sendBroadcast(broadcastIntent)
             i++
         }

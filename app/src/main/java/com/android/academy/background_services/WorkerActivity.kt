@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.Constraints
@@ -13,7 +12,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.android.academy.R
-import kotlinx.android.synthetic.main.activity_bgservice.*
+import com.android.academy.utils.logD
 import kotlinx.android.synthetic.main.activity_worker.*
 import java.util.*
 
@@ -23,8 +22,6 @@ class WorkerActivity : AppCompatActivity() {
     private var workId: UUID? = null
 
     companion object {
-        const val TAG = "WorkerActivity"
-
         const val PROGRESS_UPDATE_ACTION: String = "WORKER_PROGRESS_UPDATE_ACTION"
         const val PROGRESS_VALUE_KEY: String = "WORKER_PROGRESS_VALUE_KEY"
         const val SERVICE_STATUS: String = "WORKER_SERVICE_STATUS"
@@ -52,13 +49,13 @@ class WorkerActivity : AppCompatActivity() {
                 workId = workRequest.id
                 // add the request to the work queue
                 WorkManager.getInstance(this).enqueue(workRequest)
-                Log.d(TAG, "Work $workId enqueued")
+                logD("Work $workId enqueued")
             }
         }
         worker_btn_stop.setOnClickListener {
             workId?.let {
                 WorkManager.getInstance(this).cancelWorkById(it)
-                Log.d(TAG, "Work $it canceled")
+                logD("Work $it canceled")
                 workId = null
             }
         }

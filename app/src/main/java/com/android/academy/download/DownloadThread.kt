@@ -1,19 +1,13 @@
 package com.android.academy.download
 
 import android.os.Environment
-import android.util.Log
-
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
+import com.android.academy.utils.logD
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class DownloadThread(private val imageUrl: String, private val downloadCallBack: DownloadCallBack) :
     Thread() {
@@ -21,7 +15,7 @@ class DownloadThread(private val imageUrl: String, private val downloadCallBack:
     private var lastUpdateTime: Long = 0
 
     override fun run() {
-        Log.d("TAG", "DownloadThread # run")
+        logD("DownloadThread # run")
 
         val file = createFile()
         if (file == null) {
@@ -45,7 +39,7 @@ class DownloadThread(private val imageUrl: String, private val downloadCallBack:
                 )
             }
             val fileLength = connection.contentLength
-            Log.d("TAG", "File size: " + fileLength / 1024 + " KB")
+            logD("File size: " + fileLength / 1024 + " KB")
 
             // Input stream (Downloading file)
             inputStream = BufferedInputStream(url.openStream(), 8192)
@@ -55,7 +49,7 @@ class DownloadThread(private val imageUrl: String, private val downloadCallBack:
 
             var next: Int
             val data = ByteArray(1024)
-            while (inputStream.read(data).let {next = it; it != -1 }){
+            while (inputStream.read(data).let { next = it; it != -1 }) {
                 fos.write(data, 0, next)
 
                 updateProgress(fos, fileLength)
