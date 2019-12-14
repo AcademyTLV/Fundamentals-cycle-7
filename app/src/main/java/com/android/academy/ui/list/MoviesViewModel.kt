@@ -56,4 +56,8 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
     fun onMovieClicked(adapterPosition: Int) {
         openDetails.postValue(adapterPosition)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+    }
 }

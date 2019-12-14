@@ -69,6 +69,7 @@ class MoviesActivity : AppCompatActivity() {
 
     private fun observerOpenDetails() {
         moviesViewModel.getOpenDetails().observe(this, Observer {
+            Log.d(TAG, "open details called")
             val intent = Intent(this, DetailsActivity::class.java)
             intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, it)
             startActivity(intent)

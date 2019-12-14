@@ -13,21 +13,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.android.academy.R
-import com.android.academy.db.AppDatabase
 import com.android.academy.model.MovieModel
-import com.android.academy.model.MovieModelConverter
-import com.android.academy.model.TrailerModel
 import com.android.academy.networking.NetworkingConstants.YOUTUBE_BASE_URL
-import com.android.academy.networking.RestClient
-import com.android.academy.networking.TrailersListResult
 import com.android.academy.ui.details.DetailsActivityViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DetailsFragment : Fragment(), View.OnClickListener {
     private var movieModel: MovieModel? = null
@@ -37,7 +30,7 @@ class DetailsFragment : Fragment(), View.OnClickListener {
 
     companion object {
 
-        private val TAG = "MovieDetailsFragment"
+        private val TAG = "MOVIESX"
         private val ARG_MOVIE = "MovieModel-data"
 
         fun newInstance(movieModel: MovieModel): DetailsFragment {
@@ -52,8 +45,8 @@ class DetailsFragment : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getViewModels()
-
-
+        observeState()
+        observerOpenTrailer()
 
         movieModel = arguments?.getParcelable(ARG_MOVIE)
         Log.d(TAG, "movieModel: " + movieModel!!)
@@ -92,68 +85,35 @@ class DetailsFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onClick(view: View) {
-        movieModel?.let {
-            when (view.id) {
-                btnDetails.id -> {
-                    setButtonLoadingStatus()
-                    getMovieTrailers(it)
-                }
-                btnDownload.id -> downloadImage()
+    private fun observeState() {
+        fragmentViewModel.getState().observe(this, Observer {
+            if (it == null) return@Observer
+
+            Log.d(TAG, "State: ${it.name}")
+
+            when (it) {
+                State.LOADING -> setButtonLoadingStatus()
+                State.LOADED -> resetButtonStatus()
+                State.ERROR -> Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    private fun getMovieTrailers(movieModel: MovieModel) {
-        if (context == null) return
-        val trailerModel: TrailerModel? =
-            AppDatabase.getInstance(context!!)?.videoDao()?.getVideo(movieModel.movieId)
-        trailerModel?.let {
-            resetButtonStatus()
-            startActivityWithTrailer(trailerModel.key)
-            return
-        }
-        getTrailersFromServer(movieModel)
-    }
-
-    private fun getTrailersFromServer(movieModel: MovieModel) {
-        RestClient.moviesService.getTrailers(movieModel.movieId).enqueue(object :
-            Callback<TrailersListResult> {
-            override fun onFailure(call: Call<TrailersListResult>, t: Throwable) {
-                onFailedGettingTrailerFromServer()
-            }
-
-            override fun onResponse(call: Call<TrailersListResult>, response: Response<TrailersListResult>) {
-                onTrailerReceivedFromServer(response)
-            }
-
         })
     }
 
-    private fun onTrailerReceivedFromServer(response: Response<TrailersListResult>) {
-        resetButtonStatus()
-        response.body()?.let { result ->
-            result.results.firstOrNull()?.key?.let { key ->
-                startActivityWithTrailer(key)
-                saveTrailerResultToDb(result)
-            }
+    private fun observerOpenTrailer() {
+        fragmentViewModel.getOpenTrailer().observe(this, Observer {
+            Log.d(TAG, "open trailer called in fragment $this")
+            val trailerUrl = "${YOUTUBE_BASE_URL}$it"
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
+            startActivity(browserIntent)
+        })
+    }
+
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            btnDetails.id -> movieModel?.let { fragmentViewModel.getTrailer(it) }
+            btnDownload.id -> downloadImage()
         }
-    }
-
-    private fun saveTrailerResultToDb(result: TrailersListResult) {
-        val convertedTrailerModel: TrailerModel? = MovieModelConverter.convertTrailerResult(result)
-        AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
-    }
-
-    private fun onFailedGettingTrailerFromServer() {
-        resetButtonStatus()
-        Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun startActivityWithTrailer(it: String) {
-        val trailerUrl = "${YOUTUBE_BASE_URL}$it"
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl))
-        startActivity(browserIntent)
     }
 
     private fun setButtonLoadingStatus() {
