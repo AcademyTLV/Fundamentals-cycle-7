@@ -17,7 +17,8 @@
             android:layout_height="@dimen/back_image_size"
             android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/infinity_war_background" />
+            android:src="@drawable/infinity_war_background"
+            android:contentDescription="@string/desc_main_image" />
 
         <ImageButton
             android:id="@+id/btnDownload"
@@ -27,7 +28,8 @@
             android:layout_margin="@dimen/spacing_s"
             android:layout_alignBottom="@+id/details_iv_back"
             android:background="@drawable/download_btn_selector"
-            android:src="@android:drawable/stat_sys_download" />
+            android:src="@android:drawable/stat_sys_download"
+            android:contentDescription="@string/desc_button_download" />
 
         <ImageView
             android:id="@+id/details_iv_image"
@@ -37,7 +39,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/infinity_war_image" />
+            android:src="@drawable/infinity_war_image"
+            android:contentDescription="@string/desc_main_image" />
 
         <LinearLayout
             android:layout_width="wrap_content"

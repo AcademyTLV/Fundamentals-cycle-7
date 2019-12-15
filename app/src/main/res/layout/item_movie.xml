@@ -13,7 +13,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/infinity_war_image" />
+        tools:src="@drawable/infinity_war_image"
+        android:contentDescription="@string/desc_movie_image" />
 
     <TextView
         android:id="@+id/item_movie_tv_title"

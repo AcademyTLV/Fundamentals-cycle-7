@@ -70,5 +70,8 @@
 	<string name="download_dialog_ok">OK</string>
 	<string name="download_dialog_cancel">Cancel</string>
 	<string name="download_image_description">Main image</string>
+    <string name="desc_main_image">Main image</string>
+	<string name="desc_button_download">Button download</string>
+	<string name="desc_movie_image">Movie image</string>
 
 </resources>
