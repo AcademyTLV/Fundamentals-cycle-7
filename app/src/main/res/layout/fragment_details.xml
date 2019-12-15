@@ -17,7 +17,7 @@
             android:layout_height="@dimen/back_image_size"
             android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/infinity_war_background"
+            tools:src="@tools:sample/backgrounds/scenic"
             android:contentDescription="@string/desc_main_image" />
 
         <ImageButton
@@ -39,7 +39,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/infinity_war_image"
+            tools:src="@tools:sample/backgrounds/scenic"
             android:contentDescription="@string/desc_main_image" />
 
         <LinearLayout
