@@ -46,7 +46,6 @@ dependencies {
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     // Room - DB
     implementation "androidx.room:room-runtime:$roomVersion"
