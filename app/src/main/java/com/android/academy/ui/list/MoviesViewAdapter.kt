@@ -7,32 +7,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.R
 import com.android.academy.model.MovieModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-private class MoviesDiffUtilCallback : DiffUtil.ItemCallback<MovieModel>() {
-
-    override fun areItemsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
-        return oldItem.hashCode() == newItem.hashCode()
-    }
-
-    override fun areContentsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
-        return oldItem.imageUrl == newItem.imageUrl
-                && oldItem.name == newItem.name
-                && oldItem.overview == newItem.overview
-    }
-}
-
 class MoviesViewAdapter(
-    private val moviesViewModel: MoviesViewModel,
+    private val onMovieClickListener: OnMovieClickListener,
     context: Context
-) : RecyclerView.Adapter<MoviesViewAdapter.ViewHolder>() {
-
-    val picasso: Picasso = Picasso.get()
+) : RecyclerView.Adapter<MovieViewHolder>() {
 
     private val layoutInflater: LayoutInflater = context
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -41,12 +25,12 @@ class MoviesViewAdapter(
 
     override fun getItemCount() = asyncListDiffer.currentList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = layoutInflater.inflate(R.layout.item_movie, parent, false)
-        return ViewHolder(view, moviesViewModel)
+        return MovieViewHolder(view, onMovieClickListener)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movieModel = asyncListDiffer.currentList[position]
         holder.bind(movieModel)
     }
@@ -55,22 +39,4 @@ class MoviesViewAdapter(
         asyncListDiffer.submitList(newItems)
     }
 
-    inner class ViewHolder(view: View, moviesViewModel: MoviesViewModel) : RecyclerView.ViewHolder(view) {
-
-        private val ivImage: ImageView = view.item_movie_iv
-        private val tvTitle: TextView = view.item_movie_tv_title
-        private val tvOverview: TextView = view.item_movie_tv_overview
-
-        init {
-            view.setOnClickListener {
-                moviesViewModel.onMovieClicked(adapterPosition)
-            }
-        }
-
-        fun bind(movieModel: MovieModel) {
-            picasso.load(movieModel.imageUrl).into(ivImage)
-            tvTitle.text = movieModel.name
-            tvOverview.text = movieModel.overview
-        }
-    }
 }

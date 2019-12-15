@@ -15,7 +15,7 @@ import com.android.academy.ui.details.DetailsActivity
 import com.android.academy.utils.logD
 import kotlinx.android.synthetic.main.activity_movies.*
 
-class MoviesActivity : AppCompatActivity() {
+class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     private lateinit var moviesAdapter: MoviesViewAdapter
 
@@ -35,7 +35,7 @@ class MoviesActivity : AppCompatActivity() {
         moviesList.layoutManager = LinearLayoutManager(this)
 
         // Create Movies Adapter
-        moviesAdapter = MoviesViewAdapter(moviesViewModel, this)
+        moviesAdapter = MoviesViewAdapter(this, this)
 
         // Attach Adapter to RecyclerView
         moviesList.adapter = moviesAdapter
@@ -84,5 +84,10 @@ class MoviesActivity : AppCompatActivity() {
             R.id.action_delete -> moviesViewModel.clearMoviesFromDb()
         }
         return true
+    }
+
+    //OnMovieClickListener
+    override fun onMovieClicked(itemPosition: Int) {
+        moviesViewModel.onMovieClicked(itemPosition)
     }
 }
