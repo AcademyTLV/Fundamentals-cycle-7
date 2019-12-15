@@ -4,13 +4,11 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/orange"
 	tools:context=".ui.details.DetailsActivity">
 
 	<androidx.viewpager.widget.ViewPager
 		android:id="@+id/details_vp_container"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@color/green"/>
+		android:layout_height="match_parent"/>
 
 </FrameLayout>
