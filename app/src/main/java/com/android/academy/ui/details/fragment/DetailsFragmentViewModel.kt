@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.academy.model.MovieModel
 import com.android.academy.repos.TrailersRepository
+import com.android.academy.utils.SingleLiveEvent
 import com.android.academy.utils.logD
 
 
@@ -25,7 +26,7 @@ class DetailsFragmentViewModel(application: Application) : AndroidViewModel(appl
     fun getState(): LiveData<State> = state
 
     // Open trailer
-    private val openTrailer: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+    private val openTrailer: SingleLiveEvent<String> by lazy { SingleLiveEvent<String>() }
 
     fun getOpenTrailer(): LiveData<String> = openTrailer
 

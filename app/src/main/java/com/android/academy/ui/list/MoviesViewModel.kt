@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.academy.model.MovieModel
 import com.android.academy.repos.MoviesRepository
+import com.android.academy.utils.SingleLiveEvent
 
 enum class State { LOADING, LOADED, ERROR }
 
@@ -30,7 +31,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
     fun getState(): LiveData<State> = state
 
     // Open details
-    private val openDetails: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    private val openDetails: SingleLiveEvent<Int> by lazy { SingleLiveEvent<Int>() }
 
     fun getOpenDetails(): LiveData<Int> = openDetails
 

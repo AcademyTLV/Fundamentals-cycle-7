@@ -3,7 +3,7 @@ package com.android.academy.ui.list
 import androidx.recyclerview.widget.DiffUtil
 import com.android.academy.model.MovieModel
 
-private class MoviesDiffUtilCallback : DiffUtil.ItemCallback<MovieModel>() {
+class MoviesDiffUtilCallback : DiffUtil.ItemCallback<MovieModel>() {
 
     override fun areItemsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
         return oldItem.movieId == newItem.movieId

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.academy.model.MovieModel
 import com.android.academy.repos.MoviesRepository
+import com.android.academy.utils.SingleLiveEvent
 
 class DetailsActivityViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -27,7 +28,7 @@ class DetailsActivityViewModel(application: Application) : AndroidViewModel(appl
     }
 
     // Download Image
-    private val downloadImage: MutableLiveData<MovieModel> by lazy { MutableLiveData<MovieModel>() }
+    private val downloadImage: SingleLiveEvent<MovieModel> by lazy { SingleLiveEvent<MovieModel>() }
 
     fun getDownloadImage(): LiveData<MovieModel> = downloadImage
 
