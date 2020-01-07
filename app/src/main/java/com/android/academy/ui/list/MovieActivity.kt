@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,8 +20,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
     private lateinit var moviesAdapter: MoviesViewAdapter
 
-    private val moviesViewModel: MoviesViewModel
-        get() = ViewModelProviders.of(this)[MoviesViewModel::class.java]
+    private val moviesViewModel: MoviesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,6 +1,7 @@
 package com.android.academy.ui.details
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,8 +16,7 @@ class DetailsActivity : AppCompatActivity() {
         const val EXTRA_ITEM_POSITION = "init-position-data"
     }
 
-    private val viewModel: DetailsActivityViewModel
-        get() = ViewModelProviders.of(this)[DetailsActivityViewModel::class.java]
+    private val viewModel: DetailsActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

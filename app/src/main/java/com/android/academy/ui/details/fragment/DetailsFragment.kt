@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.android.academy.R
@@ -25,8 +26,8 @@ import kotlinx.android.synthetic.main.fragment_details.*
 class DetailsFragment : Fragment(), View.OnClickListener {
     private var movieModel: MovieModel? = null
     private val picasso = Picasso.get()
-    private lateinit var activityViewModel: DetailsActivityViewModel
-    private lateinit var fragmentViewModel: DetailsFragmentViewModel
+    private val activityViewModel: DetailsActivityViewModel by viewModels()
+    private val fragmentViewModel: DetailsFragmentViewModel  by viewModels()
 
     companion object {
 
@@ -43,20 +44,11 @@ class DetailsFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getViewModels()
         observeState()
         observerOpenTrailer()
 
         movieModel = arguments?.getParcelable(ARG_MOVIE)
         logD("movieModel: " + movieModel!!)
-    }
-
-    private fun getViewModels() {
-        activityViewModel = activity?.run {
-            ViewModelProviders.of(this)[DetailsActivityViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
-
-        fragmentViewModel = ViewModelProviders.of(this)[DetailsFragmentViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
