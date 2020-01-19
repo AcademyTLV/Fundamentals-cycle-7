@@ -22,6 +22,7 @@ import com.android.academy.model.TrailerModel
 import com.android.academy.networking.NetworkingConstants.YOUTUBE_BASE_URL
 import com.android.academy.networking.RestClient
 import com.android.academy.networking.TrailersListResult
+import com.android.academy.threads.AppExecutors
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 import retrofit2.Call
@@ -79,30 +80,38 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
         }
     }
 
+
     override fun onClick(view: View) {
-        movieModel?.let {
-            when (view.id) {
-                details_btn_trailer.id -> {
-                    setButtonLoadingStatus()
-                    getMovieTrailers(it)
-                }
-                details_ib_download.id -> {
-                    downloadImage()
-                }
+        if (movieModel == null || context == null) return
+
+        when (view.id) {
+            details_btn_trailer.id -> {
+                setButtonLoadingStatus()
+                getTrailersFromDb(movieModel!!)
+            }
+            details_ib_download.id -> {
+                downloadImage()
             }
         }
     }
 
-    private fun getMovieTrailers(movieModel: MovieModel) {
-        if (context == null) return
-        val trailerModel: TrailerModel? =
-            AppDatabase.getInstance(context!!)?.videoDao()?.getVideo(movieModel.movieId)
-        trailerModel?.let {
-            resetButtonStatus()
-            startActivityWithTrailer(trailerModel.key)
-            return
+    private fun getTrailersFromDb(movieModel: MovieModel) {
+        AppExecutors.diskIO.execute {
+            val trailerModel: TrailerModel? =
+                AppDatabase.getInstance(context!!)?.videoDao()?.getVideo(movieModel.movieId)
+            handleTrailersFromDb(trailerModel, movieModel)
         }
-        getTrailersFromServer(movieModel)
+    }
+
+    private fun handleTrailersFromDb(trailerModel: TrailerModel?, movieModel: MovieModel) {
+        AppExecutors.mainThread.execute {
+            trailerModel?.let {
+                resetButtonStatus()
+                startActivityWithTrailer(trailerModel.key)
+                return@execute
+            }
+            getTrailersFromServer(movieModel)
+        }
     }
 
     private fun getTrailersFromServer(movieModel: MovieModel) {
@@ -127,7 +136,9 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
 
     private fun saveTrailerResultToDb(result: TrailersListResult) {
         val convertedTrailerModel: TrailerModel? = MovieModelConverter.convertTrailerResult(result)
-        AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
+        AppExecutors.diskIO.execute {
+            AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
+        }
     }
 
     private fun startActivityWithTrailer(it: String) {

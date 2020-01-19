@@ -8,9 +8,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.academy.background_services.BGServiceActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.R
+import com.android.academy.background_services.BGServiceActivity
 import com.android.academy.background_services.WorkerActivity
 import com.android.academy.db.AppDatabase
 import com.android.academy.details.DetailsActivity
@@ -20,6 +20,7 @@ import com.android.academy.model.MoviesContent
 import com.android.academy.model.MoviesContent.movies
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
+import com.android.academy.threads.AppExecutors
 import com.android.academy.threads.AsyncTaskActivity
 import com.android.academy.threads.ThreadsActivity
 import kotlinx.android.synthetic.main.activity_movies.*
@@ -39,7 +40,8 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     private fun initRecyclerView() {
-        moviesList.layoutManager = LinearLayoutManager(this@MoviesActivity) as RecyclerView.LayoutManager
+        moviesList.layoutManager =
+            LinearLayoutManager(this@MoviesActivity) as RecyclerView.LayoutManager
 
         // Create Movies Adapter
         moviesAdapter = MoviesViewAdapter(
@@ -97,7 +99,9 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
             }
 
             R.id.action_delete -> {
-                AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
+                AppExecutors.diskIO.execute {
+                    AppDatabase.getInstance(this.applicationContext)?.movieDao()?.deleteAll()
+                }
                 (moviesList.adapter as MoviesViewAdapter).clearData()
                 return true
             }
@@ -114,10 +118,19 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     private fun getCachedMoviesFromDataBase() {
-        val cachedMovies: List<MovieModel>? = AppDatabase.getInstance(this)?.movieDao()?.getAll()
-        cachedMovies?.let {
-            movies.addAll(cachedMovies)
-            moviesList.adapter?.notifyDataSetChanged()
+        AppExecutors.diskIO.execute {
+            val cachedMovies: List<MovieModel>? =
+                AppDatabase.getInstance(this)?.movieDao()?.getAll()
+            handleCachedMoviesFromDb(cachedMovies)
+        }
+    }
+
+    private fun handleCachedMoviesFromDb(cachedMovies: List<MovieModel>?) {
+        AppExecutors.mainThread.execute {
+            cachedMovies?.let {
+                movies.addAll(cachedMovies)
+                moviesList.adapter?.notifyDataSetChanged()
+            }
         }
     }
 
@@ -145,8 +158,10 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
                 addAll(convertedList)
             }
             moviesList.adapter?.notifyDataSetChanged()
-            AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.deleteAll()
-            AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.insertAll(MoviesContent.movies)
+            AppExecutors.diskIO.execute {
+                AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.deleteAll()
+                AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.insertAll(MoviesContent.movies)
+            }
         }
     }
 
