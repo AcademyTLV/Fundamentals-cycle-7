@@ -21,6 +21,7 @@ import com.android.academy.model.TrailerModel
 import com.android.academy.networking.NetworkingConstants.YOUTUBE_BASE_URL
 import com.android.academy.networking.RestClient
 import com.android.academy.networking.TrailersListResult
+import com.android.academy.threads.AppExecutors
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 import retrofit2.Call
@@ -78,17 +79,26 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        movieModel?.let { movieModel ->
-            setButtonLoadingStatus()
+        if (movieModel == null || context == null) return
 
-            context?.let {
-                val trailerModel: TrailerModel? =
-                    AppDatabase.getInstance(context!!)?.videoDao()?.getVideo(movieModel.movieId)
-                trailerModel?.let {
-                    resetButtonStatus()
-                    startActivityWithTrailer(trailerModel.key)
-                    return
-                }
+        setButtonLoadingStatus()
+        getTrailersFromDb(movieModel!!)
+    }
+
+    private fun getTrailersFromDb(movieModel: MovieModel) {
+        AppExecutors.diskIO.execute {
+            val trailerModel: TrailerModel? =
+                AppDatabase.getInstance(context!!)?.videoDao()?.getVideo(movieModel.movieId)
+            handleTrailersFromDb(trailerModel, movieModel)
+        }
+    }
+
+    private fun handleTrailersFromDb(trailerModel: TrailerModel?, movieModel: MovieModel) {
+        AppExecutors.mainThread.execute {
+            trailerModel?.let {
+                resetButtonStatus()
+                startActivityWithTrailer(trailerModel.key)
+                return@execute
             }
             getTrailersFromServer(movieModel)
         }
@@ -123,7 +133,9 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
 
     private fun saveTrailerResultToDb(result: TrailersListResult) {
         val convertedTrailerModel: TrailerModel? = MovieModelConverter.convertTrailerResult(result)
-        AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
+        AppExecutors.diskIO.execute {
+            AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
+        }
     }
 
     private fun startActivityWithTrailer(it: String) {
