@@ -7,6 +7,7 @@ import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
+import com.android.academy.threads.AppExecutors
 import com.android.academy.utils.logD
 import retrofit2.Call
 import retrofit2.Callback
@@ -55,14 +56,18 @@ class MoviesRepository(private val appContext: Context) {
 
     private fun updateDbWithNewMovies(movies: List<MovieModel>) {
         logD("Update DB with fresh movies")
-        AppDatabase.getInstance(appContext)?.apply {
-            movieDao()?.deleteAll()
-            movieDao()?.insertAll(movies)
+        AppExecutors.diskIO.execute {
+            AppDatabase.getInstance(appContext)?.apply {
+                movieDao()?.deleteAll()
+                movieDao()?.insertAll(movies)
+            }
         }
     }
 
     fun clearMoviesFromDb() {
         logD("clearMoviesFromDb")
-        AppDatabase.getInstance(appContext)?.movieDao()?.deleteAll()
+        AppExecutors.diskIO.execute {
+            AppDatabase.getInstance(appContext)?.movieDao()?.deleteAll()
+        }
     }
 }

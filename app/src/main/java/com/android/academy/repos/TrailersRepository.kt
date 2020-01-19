@@ -9,6 +9,7 @@ import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.TrailerModel
 import com.android.academy.networking.RestClient
 import com.android.academy.networking.TrailersListResult
+import com.android.academy.threads.AppExecutors
 import com.android.academy.utils.logD
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,13 +22,15 @@ class TrailersRepository(private val appContext: Context) {
     fun getTrailer(): LiveData<TrailerModel> = mutableLiveData
 
     fun fetchTrailer(movieModel: MovieModel) {
-        val trailerModel = AppDatabase.getInstance(appContext)?.videoDao()?.getVideo(movieModel.movieId)
-        if (trailerModel != null) {
-            logD("We got trailer from DB")
-            mutableLiveData.value = trailerModel
-        } else {
-            logD("We didn't get trailer from DB")
-            getTrailerFromServer(movieModel)
+        AppExecutors.diskIO.execute {
+            val trailerModel = AppDatabase.getInstance(appContext)?.videoDao()?.getVideo(movieModel.movieId)
+            if (trailerModel != null) {
+                logD("We got trailer from DB")
+                mutableLiveData.postValue(trailerModel)
+            } else {
+                logD("We didn't get trailer from DB")
+                getTrailerFromServer(movieModel)
+            }
         }
     }
 
@@ -36,7 +39,7 @@ class TrailersRepository(private val appContext: Context) {
             Callback<TrailersListResult> {
             override fun onFailure(call: Call<TrailersListResult>, t: Throwable) {
                 logD("On failure: ${t.message}")
-                mutableLiveData.value = null
+                mutableLiveData.postValue(null)
             }
 
             override fun onResponse(call: Call<TrailersListResult>, response: Response<TrailersListResult>) {
@@ -44,7 +47,7 @@ class TrailersRepository(private val appContext: Context) {
                 response.body()?.let {
                     logD("We got ${response.body()!!.results.size} trailers")
                     val trailerModel = MovieModelConverter.convertTrailerResult(it)
-                    mutableLiveData.value = trailerModel
+                    mutableLiveData.postValue(trailerModel)
                     updateDbWithNewTrailer(trailerModel)
                 }
             }
@@ -54,6 +57,8 @@ class TrailersRepository(private val appContext: Context) {
 
     private fun updateDbWithNewTrailer(trailerModel: TrailerModel?) {
         logD("Update DB with trailer")
-        AppDatabase.getInstance(appContext)?.videoDao()?.insert(trailerModel)
+        AppExecutors.diskIO.execute {
+            AppDatabase.getInstance(appContext)?.videoDao()?.insert(trailerModel)
+        }
     }
 }
