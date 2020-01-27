@@ -6,16 +6,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RestClient {
 
-    val moviesService by lazy {
+    val moviesService: MoviesService by lazy {
         val retrofit = createRetrofitClient()
-
         retrofit.create(MoviesService::class.java)
     }
 
     private fun createRetrofitClient(): Retrofit {
-        val retrofit = Retrofit.Builder().baseUrl(BASE_API_URL)
+        return Retrofit.Builder().baseUrl(BASE_API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        return retrofit
     }
 }
