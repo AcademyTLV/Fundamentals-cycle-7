@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.R
 import com.android.academy.background_services.BGServiceActivity
 import com.android.academy.background_services.WorkerActivity
@@ -17,7 +16,6 @@ import com.android.academy.details.DetailsActivity
 import com.android.academy.model.MovieModel
 import com.android.academy.model.MovieModelConverter
 import com.android.academy.model.MoviesContent
-import com.android.academy.model.MoviesContent.movies
 import com.android.academy.networking.MoviesListResult
 import com.android.academy.networking.RestClient
 import com.android.academy.threads.AppExecutors
@@ -40,8 +38,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     private fun initRecyclerView() {
-        moviesList.layoutManager =
-            LinearLayoutManager(this@MoviesActivity) as RecyclerView.LayoutManager
+        moviesList.layoutManager = LinearLayoutManager(this@MoviesActivity)
 
         // Create Movies Adapter
         moviesAdapter = MoviesViewAdapter(
@@ -54,18 +51,20 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
 
         moviesList.setHasFixedSize(true)
         // Populate Adapter with data
-        moviesAdapter.setData(movies)
+        moviesAdapter.setData(MoviesContent.movies)
     }
 
+    // When user click, show movie name in a Toast and open DetailsActivity with extra position in the intent
     override fun onMovieClicked(movie: MovieModel, itemPosition: Int) {
         Toast.makeText(this, movie.name, Toast.LENGTH_SHORT).show()
 
-        if (itemPosition < 0 || itemPosition >= movies.size) return
+        if (itemPosition < 0 || itemPosition >= MoviesContent.movies.size) return
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.EXTRA_ITEM_POSITION, itemPosition)
         startActivity(intent)
     }
 
+    // Menu option are inflated here
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.movies_activity_menu, menu)
@@ -111,6 +110,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     private fun loadMovies() {
+        // Clear local list
         MoviesContent.clear()
         getCachedMoviesFromDataBase()
         main_progress.visibility = View.VISIBLE
@@ -128,7 +128,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
     private fun handleCachedMoviesFromDb(cachedMovies: List<MovieModel>?) {
         AppExecutors.mainThread.execute {
             cachedMovies?.let {
-                movies.addAll(cachedMovies)
+                MoviesContent.movies.addAll(cachedMovies)
                 moviesList.adapter?.notifyDataSetChanged()
             }
         }
@@ -140,10 +140,7 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
                 onFailGettingDataFromServer()
             }
 
-            override fun onResponse(
-                call: Call<MoviesListResult>,
-                response: Response<MoviesListResult>
-            ) {
+            override fun onResponse(call: Call<MoviesListResult>, response: Response<MoviesListResult>) {
                 onDataReceivedFromServer(response)
             }
         })
@@ -153,15 +150,20 @@ class MoviesActivity : AppCompatActivity(), OnMovieClickListener {
         main_progress.visibility = View.GONE
         response.body()?.let {
             val convertedList = MovieModelConverter.convertNetworkMovieToModel(it)
-            movies.apply {
+            MoviesContent.movies.apply {
                 clear()
                 addAll(convertedList)
             }
             moviesList.adapter?.notifyDataSetChanged()
-            AppExecutors.diskIO.execute {
-                AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.deleteAll()
-                AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.insertAll(MoviesContent.movies)
-            }
+            updateDBWithFreshMovies()
+        }
+    }
+
+    private fun updateDBWithFreshMovies() {
+        AppExecutors.diskIO.execute {
+            AppDatabase.getInstance(this@MoviesActivity)?.movieDao()?.deleteAll()
+            AppDatabase.getInstance(this@MoviesActivity)?.movieDao()
+                ?.insertAll(MoviesContent.movies)
         }
     }
 

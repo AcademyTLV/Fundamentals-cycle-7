@@ -107,13 +107,10 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
     private fun getTrailersFromServer(it: MovieModel) {
         RestClient.moviesService.getTrailers(it.movieId).enqueue(object :
             Callback<TrailersListResult> {
+
             override fun onFailure(call: Call<TrailersListResult>, t: Throwable) {
                 resetButtonStatus()
-                Toast.makeText(
-                    context,
-                    R.string.something_went_wrong,
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -121,18 +118,21 @@ class MovieDetailsFragment : Fragment(), View.OnClickListener {
                 response: Response<TrailersListResult>
             ) {
                 resetButtonStatus()
-                response.body()?.let { result ->
-                    result.results.firstOrNull()?.key?.let {
-                        startActivityWithTrailer(it)
-                        saveTrailerResultToDb(result)
-                    }
-                }
+                response.body()?.let { handleResultReceivedFromServer(it) }
             }
         })
     }
 
+    private fun handleResultReceivedFromServer(result: TrailersListResult) {
+        result.results.firstOrNull()?.key?.let {
+            startActivityWithTrailer(it)
+            saveTrailerResultToDb(result)
+        }
+    }
+
     private fun saveTrailerResultToDb(result: TrailersListResult) {
-        val convertedTrailerModel: TrailerModel? = MovieModelConverter.convertTrailerResult(result)
+        val convertedTrailerModel: TrailerModel? =
+            MovieModelConverter.convertTrailerResultToModel(result)
         AppExecutors.diskIO.execute {
             AppDatabase.getInstance(context!!)?.videoDao()?.insert(convertedTrailerModel)
         }

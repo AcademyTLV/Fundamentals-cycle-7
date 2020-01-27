@@ -30,7 +30,8 @@ class MoviesViewAdapter(
     context: Context
 ) : RecyclerView.Adapter<MoviesViewAdapter.ViewHolder>() {
 
-    val picasso = Picasso.get()
+    val picasso: Picasso = Picasso.get()
+
     private val layoutInflater: LayoutInflater = context
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
