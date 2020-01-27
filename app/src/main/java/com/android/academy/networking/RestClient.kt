@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RestClient {
 
-    val moviesService by lazy {
+    val moviesService: MoviesService by lazy {
         val retrofit = createRetrofitClient()
         retrofit.create(MoviesService::class.java)
     }
